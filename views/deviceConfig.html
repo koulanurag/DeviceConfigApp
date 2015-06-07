@@ -1,0 +1,20 @@
+<div class="deviceConfigForm">
+    Devices: 
+    <select data-ng-options="deviceName for deviceName in devicesName" data-ng-model="selectedDevice" data-ng-change="getTransducers(selectedDevice)"></select>
+
+    <div>
+        <label data-ng-show="selectedDevice!==undefined">Transducers:</label>
+        <div data-ng-repeat="transducer in transducers">
+          <div class="action-checkbox">
+               <input id="{{transducer.name}}" type="checkbox" value="{{transducer.name}}" data-ng-checked="selection.indexOf(transducer.name) > -1" data-ng-click="toggleSelection(transducer.name)" />
+               <label for="{{transducer.name}}"></label>
+               {{transducer.name}}
+          </div>
+        </div>
+        <span class="selected-item" data-ng-show='selectedTransducers.length > 0'>Selected Transducers:</span>
+        <span data-ng-repeat="name in selectedTransducers" class="selected-item">
+          {{name}}
+        </span>
+    </div>
+    <input type="button" data-ng-disabled="selectedDevice==undefined || selectedTransducers.length ==0" data-ng-click="sendDeviceConfig()" value="Send"/>
+</div>

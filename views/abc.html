@@ -1,0 +1,74 @@
+<!-- multistep form -->
+<form id="msform">
+  <!-- progressbar -->
+  <ul id="progressbar">
+    <li class="active">Select Device</li>
+    <li>Add Transducers</li>
+    <li>Status</li>
+  </ul>
+  <!-- fieldsets -->
+  <fieldset>
+    <h2 class="fs-title">Select a device</h2>
+    <h3 class="fs-subtitle">This is step 1</h3>
+    <div class="error">
+    <i class="fa fa-spinner fa-3x faa-spin animated"  data-ng-if="showLoading"></i>
+    <i class="fa fa-warning fa" data-ng-if="showLoadError">Sorry, Something went Wrong</i>
+    </div>
+    <div class="content" ng-if="!showLoadError && !showLoading">
+        <span class="custom-dropdown big">
+            <select data-ng-options="deviceName for deviceName in devicesName" data-ng-model="selectedDevice" ></select>
+        </span>
+    </div>
+    <input type="button" name="next" class="next action-button" value="Next" ng-show="!showLoadError && !showLoading"/>
+  </fieldset>
+  <fieldset>
+    <h2 class="fs-title">Add Transducers</h2>
+    <h3 class="fs-subtitle">Details of Transducers you wish to enable</h3>
+    <div class="transducer-detail" data-ng-repeat="t in transducers">
+      <input type="checkbox" data-ng-model="t.enable" data-ng-change="validateTransducerDetail(t.id)"/>
+      <input type="text" data-ng-model="t.name" placeholder="Name of Transducer" />
+      <input type="text" data-ng-model="t.depth" placeholder="Depth of Transducer" />
+      <span class="custom-dropdown">
+      <select >
+        <option>Enable</option>
+        <option>Disable</option>
+      </select>
+      </span>
+      <div>
+          <div ng-if="t.error" class="pull-left">* enter details</div>
+      </div>
+    </div>
+    <input type="button" name="previous" class="previous action-button" value="Previous" />
+    <input type="button" name="next" data-ng-click="sendDeviceConfig()" class="next action-button" value="Submit" />
+  </fieldset>
+  <fieldset>
+    <h2 class="fs-title">Status</h2>
+    <h3 class="fs-subtitle">Live Status of Transducers</h3>
+    <div class="error">
+        <i class="fa fa-spinner fa-3x faa-spin animated"  data-ng-if="showLoading"></i>
+        <i class="fa fa-warning fa" data-ng-if="showLoadError">Sorry, Something went Wrong</i>
+    </div>
+    <div class="content" ng-if="!showLoadError && !showLoading">
+    {{"Device : " + deviceConfigStatus.echosounder}}
+        <table class="table status-table">
+            <tr>
+                <th>Name</th>
+                <th>Hardware Channel</th>
+                <th>Software Channel</th>
+                <th>Status</th>
+            </tr>
+            <tr data-ng-repeat="d in deviceConfigStatus.transducers" data-ng-class="{ 'success': d.status=='enabled','danger': d.status=='disabled' , 'info':  d.status=='recording'}">
+                <td>{{d.name}}</td>
+                <td>{{d.hardware_channel}}</td>
+                <td>{{d.software_channel}}</td>
+                <td>{{d.status}}</td>
+            </tr>
+        </table>
+    </div>
+    <input type="button" name="previous" class="previous action-button" value="Previous" />
+    <!--<input type="submit" name="submit" class="submit action-button" value="Submit" />-->
+  </fieldset>
+</form>
+
+
+<script src="js/layout.js"></script>
