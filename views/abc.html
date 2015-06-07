@@ -1,5 +1,5 @@
 <!-- multistep form -->
-<form id="msform">
+<form id="msform" data-ng-submit="sendDeviceConfig()">
   <!-- progressbar -->
   <ul id="progressbar">
     <li class="active">Select Device</li>
@@ -40,7 +40,7 @@
       
     </div>
     <input type="button" name="previous" class="previous action-button" value="Previous" />
-    <input type="submit" name="submit" data-ng-click="sendDeviceConfig()" class="action-button" value="Submit" />
+    <input type="submit" name="submit"  class="action-button" value="Submit" />
     <input type="button" name="next" id="goToStatusButton" class="next" value="" ng-hide="true"/>
   </fieldset>
   <fieldset>
