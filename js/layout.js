@@ -78,13 +78,6 @@ $(".previous").click(function(){
 	});
 });
 
-$(".submit").click(function(){
-	return false;
-})
-
-
-//enable popovers
-$('[data-toggle="popover"]').popover()
 
 
 
