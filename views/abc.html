@@ -34,12 +34,10 @@
       <input type="checkbox" data-ng-model="t.enable" data-ng-change="validateTransducerDetail(t.id)"/>
       <input type="text" data-ng-model="t.name" placeholder="Name of Transducer" />
       <input type="text" data-ng-model="t.depth" placeholder="Depth of Transducer" />
-      <span class="custom-dropdown">
-      <select >
-        <option>Enable</option>
-        <option>Disable</option>
-      </select>
-      </span>
+      <i data-ng-class="{'fa fa-microphone':t.recording==true,'fa fa-microphone-slash':t.recording==false}">
+          <input type="checkbox" data-ng-model="t.recording"/>
+      </i>
+      
     </div>
     <input type="button" name="previous" class="previous action-button" value="Previous" />
     <input type="button" name="submit" data-ng-click="sendDeviceConfig()" class="action-button" value="Submit" />

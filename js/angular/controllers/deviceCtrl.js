@@ -3,12 +3,12 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory','s
     function ($scope, $timeout, deviceListFactory,sendDeviceConfigFactory) {
         $scope.showLoadError = false;
         $scope.showLoading = false;
-        $scope.transducers=[{"id":1,"enable":false,"name":"","depth":"","recording":true,"error":false},
-					{"id":2,"enable":false,"name":"","depth":"","recording":true,"error":false},
-					{"id":3,"enable":false,"name":"","depth":"","recording":true,"error":false},
-					{"id":4,"enable":false,"name":"","depth":"","recording":true,"error":false},
-					{"id":5,"enable":false,"name":"","depth":"","recording":true,"error":false},
-					{"id":6,"enable":false,"name":"","depth":"","recording":true,"error":false}
+        $scope.transducers=[{"id":1,"enable":false,"name":"","depth":"","recording":false,"error":false},
+					{"id":2,"enable":false,"name":"","depth":"","recording":false,"error":false},
+					{"id":3,"enable":false,"name":"","depth":"","recording":false,"error":false},
+					{"id":4,"enable":false,"name":"","depth":"","recording":false,"error":false},
+					{"id":5,"enable":false,"name":"","depth":"","recording":false,"error":false},
+					{"id":6,"enable":false,"name":"","depth":"","recording":false,"error":false}
 					]
 		$scope.disableSubmitButton=false;
         $scope.validateTransducerDetail = function(id){
@@ -75,7 +75,7 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory','s
                             console.log('success send')
                             //console.log("deviceConfigStatus:",$scope.deviceConfigStatus)
                             //alert("deviceConfigStatus:"+$scope.deviceConfigStatus)
-                        },function(response){
+                         },function(response){
                             $scope.showLoading = false;
                             $scope.showLoadError = true;
                             console.log('There was some error while retriving device config status')
