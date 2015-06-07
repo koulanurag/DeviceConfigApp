@@ -3,7 +3,7 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory','s
     function ($scope, $timeout, deviceListFactory,sendDeviceConfigFactory) {
         $scope.showLoadError = false;
         $scope.showLoading = false;
-        $scope.transducers=[{"id":1,"enable":false,"name":"","depth":"","recording":true},
+        $scope.transducers=[{"id":1,"enable":false,"name":"","depth":"","recording":true,"error":false},
 					{"id":2,"enable":false,"name":"","depth":"","recording":true,"error":false},
 					{"id":3,"enable":false,"name":"","depth":"","recording":true,"error":false},
 					{"id":4,"enable":false,"name":"","depth":"","recording":true,"error":false},
@@ -31,44 +31,62 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory','s
         
         $scope.sendDeviceConfig = function(){
             var selectedTransducers=[]
+            var errorFlag=false
             angular.forEach( $scope.transducers, function(value,key){
                 if(value.enable == true){
-                   selectedTransducers.push([value.name,value.depth,value.recording]) 
+                   if (value.name=="" || value.depth==""){
+                       value.error=true
+                       errorFlag=true
+                   }else{
+                       selectedTransducers.push([value.name,value.depth,value.recording])
+                       value.error=false
+                   }
+
+                }
+                else{
+                    value.error=false
                 }
             });
             
             console.log("sendDeviceConfig")
             console.log(selectedTransducers)
-            if (selectedTransducers.length !==0){
-                //testing hardcoded data
-                $scope.deviceConfigStatus=[{"transducers": [{"software_channel": "1", "status": "recording", "hardware_channel": "1", "name": "H200202"},
-                                            {"software_channel": "2", "status": "enabled", "hardware_channel": "2", "name": "H200333"},
-                                            {"software_channel": "3", "status": "disabled", "hardware_channel": "3", "name": "H200612"}],
-                            "echosounder": "4C:00:00:01"}]
-                $scope.deviceConfigStatus=$scope.deviceConfigStatus[0]    
-                //ends
-/*                $scope.showLoading = true;
-                sendDeviceConfigFactory.sendData($scope.selectedDevice,selectedTransducers)
-                .then(
-                    function(response){
-                        $scope.showLoading = false;
-                        //$scope.deviceConfigStatus = sendDeviceConfigFactory.getStatus()
-                        $scope.deviceConfigStatus=[{"transducers": [{"software_channel": "1", "status": "recording", "hardware_channel": "1", "name": "H200202"},
-                                                                    {"software_channel": "2", "status": "enabled", "hardware_channel": "2", "name": "H200333"},
-                                                                    {"software_channel": "3", "status": "disabled", "hardware_channel": "3", "name": "H200612"}],
-                                                    "echosounder": "4C:00:00:01"}]
-                        $scope.deviceConfigStatus=$scope.deviceConfigStatus[0]         
-                        console.log('success send')
-                        //console.log("deviceConfigStatus:",$scope.deviceConfigStatus)
-                        //alert("deviceConfigStatus:"+$scope.deviceConfigStatus)
-                    },function(response){
-                        $scope.showLoading = false;
-                        $scope.showLoadError = true;
-                        console.log('There was some error while retriving device config status')
-                    })
-*/            }
-            else{
-                console.log("Please select transducer..")
+            if (!errorFlag){
+                
+                if (selectedTransducers.length !==0){
+                    $('#goToStatusButton')[0].click()
+                    //testing hardcoded data
+                    $scope.deviceConfigStatus=[{"transducers": [{"software_channel": "1", "status": "recording", "hardware_channel": "1", "name": "H200202"},
+                                                {"software_channel": "2", "status": "enabled", "hardware_channel": "2", "name": "H200333"},
+                                                {"software_channel": "3", "status": "disabled", "hardware_channel": "3", "name": "H200612"}],
+                                "echosounder": "4C:00:00:01"}]
+                    $scope.deviceConfigStatus=$scope.deviceConfigStatus[0]    
+                    //ends
+    /*                $scope.showLoading = true;
+                    sendDeviceConfigFactory.sendData($scope.selectedDevice,selectedTransducers)
+                    .then(
+                        function(response){
+                            $scope.showLoading = false;
+                            //$scope.deviceConfigStatus = sendDeviceConfigFactory.getStatus()
+                            $scope.deviceConfigStatus=[{"transducers": [{"software_channel": "1", "status": "recording", "hardware_channel": "1", "name": "H200202"},
+                                                                        {"software_channel": "2", "status": "enabled", "hardware_channel": "2", "name": "H200333"},
+                                                                        {"software_channel": "3", "status": "disabled", "hardware_channel": "3", "name": "H200612"}],
+                                                        "echosounder": "4C:00:00:01"}]
+                            $scope.deviceConfigStatus=$scope.deviceConfigStatus[0]         
+                            console.log('success send')
+                            //console.log("deviceConfigStatus:",$scope.deviceConfigStatus)
+                            //alert("deviceConfigStatus:"+$scope.deviceConfigStatus)
+                        },function(response){
+                            $scope.showLoading = false;
+                            $scope.showLoadError = true;
+                            console.log('There was some error while retriving device config status')
+                        })
+    */            }
+                else{
+                    $scope.transducers[0].error=true;
+                    console.log("Please select transducer..")
+                }
+    
+                
             }
             
         }
