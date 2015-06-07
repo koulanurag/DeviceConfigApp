@@ -91,7 +91,8 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory','s
             
         }
         $timeout(function () {
-/*            $scope.showLoading = true;
+/*          //this code should be uncommented when working with real data
+            $scope.showLoading = true;
              deviceListFactory.loadData()
                 .then(function (response) {
                     $scope.showLoading = false;
