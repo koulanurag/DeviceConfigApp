@@ -1,6 +1,7 @@
 ngDevices.factory('deviceListFactory', [ '$http',
     function ($http) {
-
+        
+        
 
         function DeviceList() {
 
@@ -14,9 +15,29 @@ ngDevices.factory('deviceListFactory', [ '$http',
 
         }
 
-        DeviceList.prototype.loadData = function () {
+        DeviceList.prototype.loadData = function (callback_function) {
+
             var params = {};
-            return $http(
+
+            //var ws = new WebSocket("ws://localhost:8080");
+            var ws = new_websocket(); 
+            
+            ws.onopen = function () {                
+                ws.send("whatever"); // retrive device list
+            };
+
+            ws.onmessage = function (event) {
+
+                DeviceList.prototype.loadDataSuccess(event);
+                callback_function(true);                
+
+            };
+
+            ws.onerror = function (event) {
+                callback_function(false);
+            };
+            
+ /*          return $http(
                 {
                     method: this.defaults.endpointGETMethod,
                     url: this.defaults.endpointURL,
@@ -24,11 +45,12 @@ ngDevices.factory('deviceListFactory', [ '$http',
                     cache: false
                 }
             ).then($.proxy(DeviceList.prototype.loadDataSuccess, this));
+*/
         };
 
         DeviceList.prototype.loadDataSuccess = function (response) {
-
-            this.data = response.data;
+            
+            this.data = JSON.parse(response.data);
 
         };
 
@@ -41,20 +63,3 @@ ngDevices.factory('deviceListFactory', [ '$http',
         return new DeviceList();
 
     }]);
-
-/*var deviceFactoryResolve = {
-
-    loadData: ['$q', '$stateParams', 'deviceListFactory', '$state',
-        function ($q, $stateParams, deviceListFactory, $state) {
-            var deferred = $q.defer();
-            deviceListFactory.loadData()
-                .then(function (response) {
-                    deferred.resolve(response);
-                }, function (response) {
-                    console.log("There was an error while retrieving device list");
-                    $state.go('error');
-                    deferred.reject(response);
-                });
-            return deferred.promise;
-        }]
-}*/
