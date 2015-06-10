@@ -35,6 +35,7 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory','s
         $scope.selectedTransducers=[];
         
         $scope.sendDeviceConfig = function(){
+            console.log($scope.selectedDevice)
             var selectedTransducers=[]
             var errorFlag=false
             angular.forEach( $scope.transducers, function(value,key){
@@ -114,13 +115,15 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory','s
                 });*/
                 
         //------------following code just for testing
+        console.log('timeout');
         
         $scope.deviceList=[{"Echosounder1": "4C:00:00:01"}, {"Echosounder2": "4C:00:00:02"}, {"Echosounder3": "4C:00:00:03"}] 
+        $scope.devices={"names":[],"selectedDevice":""}
         $scope.devicesName=[]
         angular.forEach($scope.deviceList, function(value, key) {
-            $scope.devicesName.push(Object.keys(value)[0]);
+            $scope.devices.names.push(Object.keys(value)[0]);
         });
-        $scope.selectedDevice =$scope.devicesName[0]
+        $scope.devices.selectedDevice =$scope.devices.names[0]
         //-------------------
         });
 

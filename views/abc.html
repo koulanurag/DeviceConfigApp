@@ -1,3 +1,4 @@
+{{devices.selectedDevice}}
 <!-- multistep form -->
 <form id="msform" data-ng-submit="sendDeviceConfig()">
   <!-- progressbar -->
@@ -16,14 +17,15 @@
     </div>
     <div class="content" ng-if="!showLoadError && !showLoading">
         <span class="custom-dropdown big">
-            <select data-ng-options="deviceName for deviceName in devicesName" data-ng-model="selectedDevice" ></select>
+            <select data-ng-options="deviceName for deviceName in devices.names" data-ng-model="devices.selectedDevice" ></select>
         </span>
+        
     </div>
     <input type="button" name="next" class="next action-button" value="Next" ng-show="!showLoadError && !showLoading"/>
   </fieldset>
   <fieldset>
     <h2 class="fs-title">Configure EchoSouder</h2>
-    <h3 class="fs-subtitle">Details of "{{selectedDevice}}"</h3>
+    <h3 class="fs-subtitle">Device : {{devices.selectedDevice}}</h3>
     <table class="table echosounder-table">
         <thead>
             <tr>
