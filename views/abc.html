@@ -3,6 +3,7 @@
   <!-- progressbar -->
   <ul id="progressbar">
     <li class="active">Select Device</li>
+    <li>Configure EchoSouder</li>
     <li>Add Transducers</li>
     <li>Status</li>
   </ul>
@@ -22,6 +23,41 @@
     <input type="button" name="next" class="next action-button" value="Next" ng-show="!showLoadError && !showLoading"/>
   </fieldset>
   <fieldset>
+    <h2 class="fs-title">Configure EchoSouder</h2>
+    <h3 class="fs-subtitle">Details of "{{selectedDevice}}"</h3>
+    <table class="table echosounder-table">
+        <thead>
+            <tr>
+                <td>Transmit Power</td>
+                <td>Ping Interval</td>
+                <td>Mode</td>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <span class="custom-dropdown medium">
+                    <select data-ng-options="power for power in transmitPowers" data-ng-model="selectedTransmitPower" ></select> 
+                </span>
+                <span class="units">W</span>
+            </td>
+            <td>
+                <input type="number" data-ng-model="pingInterval.value" placeholder="" min="{{pingInterval.min}}" max="{{pingInterval.max}}" step="{{pingInterval.step}}"/>
+                <span class="units">ms</span>
+            </td>
+            <td>
+                <span class="custom-dropdown medium">
+                    <select data-ng-options="mode for mode in pingModes.modes" data-ng-model="pingModes.selectedMode" ></select> 
+                </span> 
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    
+    <input type="button" name="previous" class="previous action-button" value="Previous" />
+    <input type="button" name="next" id="" class="next action-button" value="Next"/>
+  </fieldset>
+  <fieldset>
     <h2 class="fs-title">Add Transducers</h2>
     <h3 class="fs-subtitle">Details of Transducers you wish to enable</h3>
     <div class="transducer-detail" data-ng-repeat="t in transducers">
@@ -37,7 +73,9 @@
       <i data-ng-class="{'fa fa-microphone':t.recording==true,'fa fa-microphone-slash':t.recording==false}">
           <input type="checkbox" data-ng-model="t.recording"/>
       </i>
-      
+      <i data-ng-class="{'fa fa-arrow-circle-up':t.view==true,'fa fa-arrow-circle-down':t.view==false}">
+          <input type="checkbox" data-ng-model="t.view"/>
+      </i>
     </div>
     <input type="button" name="previous" class="previous action-button" value="Previous" />
     <input type="submit" name="submit"  class="action-button" value="Submit" />

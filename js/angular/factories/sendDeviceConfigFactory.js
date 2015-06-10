@@ -10,17 +10,29 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
                 endpointURL: 'json/devicesConfig',
                 
                 device: 'device',
-                transducers: 'transducers'
+                transducers: 'transducers',
+                transmitPower:'transmitPower',
+                pingMode: 'pingMode',
+                pingInterval:'pingInterval',
 
             };
 
         }
 
-        DeviceConfig.prototype.sendData = function (device,transducers) {
+        DeviceConfig.prototype.sendData = function (device,transmitPower,pingMode,pingInterval,transducers) {
             var params = {};
             if (device !== '') {
                 params[this.defaults.device] = device;
             }
+            if(transmitPower !==''){
+                params[this.defaults.transmitPower] = transmitPower;
+            }
+            if(pingMode !==''){
+                params[this.defaults.pingMode] = pingMode;
+            }
+            if(pingInterval !==''){
+                params[this.defaults.pingInterval] = pingInterval;
+            }            
             if (transducers !== '') {
                 params[this.defaults.transducers] = transducers;
             }

@@ -3,13 +3,18 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory','s
     function ($scope, $timeout, deviceListFactory,sendDeviceConfigFactory) {
         $scope.showLoadError = false;
         $scope.showLoading = false;
-        $scope.transducers=[{"id":1,"enable":false,"name":"","depth":"","recording":false,"error":false},
-					{"id":2,"enable":false,"name":"","depth":"","recording":false,"error":false},
-					{"id":3,"enable":false,"name":"","depth":"","recording":false,"error":false},
-					{"id":4,"enable":false,"name":"","depth":"","recording":false,"error":false},
-					{"id":5,"enable":false,"name":"","depth":"","recording":false,"error":false},
-					{"id":6,"enable":false,"name":"","depth":"","recording":false,"error":false}
+        $scope.transducers=[{"id":1,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
+					{"id":2,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
+					{"id":3,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
+					{"id":4,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
+					{"id":5,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
+					{"id":6,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false}
 					]
+	    $scope.transmitPowers=[12.5,100,200]//units is Watts
+	    $scope.selectedTransmitPower=$scope.transmitPowers[0]//initialization
+	    $scope.pingModes={"modes":['Sync','Auto'],"selectedMode":"Sync"}
+	    $scope.pingInterval ={"min":100,"max":10000,"step":100,"value":100}
+	    
 		$scope.disableSubmitButton=false;
         $scope.validateTransducerDetail = function(id){
             angular.forEach( $scope.transducers, function(value,key){
