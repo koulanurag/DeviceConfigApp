@@ -1,3 +1,16 @@
+.echosounder-table{
+    width: 80%;
+    text-align: center;
+    margin: auto;
+}
+.echosounder-table .custom-dropdown{
+    margin:0px;
+}
+.echosounder-table input{
+   font-size:14px !important;
+}
+
+
 .form-error-tooltip {
   opacity: 1;
   margin-left: -36px !important;
@@ -201,7 +214,7 @@ body {
   color: white;
   text-transform: uppercase;
   font-size: 9px;
-  width: 33.33%;
+  width: 25%;
   float: left;
   position: relative;
 }
