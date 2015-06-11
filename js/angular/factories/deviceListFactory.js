@@ -21,7 +21,7 @@ ngDevices.factory('deviceListFactory', [ '$http',
 
             //var ws = new WebSocket("ws://localhost:8080");
             var ws = new_websocket(); 
-            
+
             ws.onopen = function () {                
                 ws.send("whatever"); // retrive device list
             };

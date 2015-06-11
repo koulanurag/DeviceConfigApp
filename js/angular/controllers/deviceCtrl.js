@@ -1,7 +1,7 @@
 ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', 'sendDeviceConfigFactory',
     function ($scope, $timeout, deviceListFactory, sendDeviceConfigFactory) {
-              
-        
+
+
         $scope.showLoadError = false;
         $scope.showLoading = false;
 
@@ -11,12 +11,12 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
 					{"id":4,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
 					{"id":5,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
 					{"id":6,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false}
-					]
-	    $scope.transmitPowers=[12.5,100,200]//units is Watts
-	    $scope.selectedTransmitPower=$scope.transmitPowers[0]//initialization
-	    $scope.pingModes={"modes":['Sync','Auto'],"selectedMode":"Sync"}
-	    $scope.pingInterval ={"min":100,"max":10000,"step":100,"value":100}
-	    
+					];
+	    $scope.transmitPowers=[12.5,100,200];//units is Watts
+	    $scope.selectedTransmitPower=$scope.transmitPowers[0];//initialization
+	    $scope.pingModes={"modes":['Sync','Auto'],"selectedMode":"Sync"};
+	    $scope.pingInterval ={"min":100,"max":10000,"step":100,"value":100};
+
 		$scope.disableSubmitButton=false;
         $scope.validateTransducerDetail = function(id){
             angular.forEach( $scope.transducers, function(value,key){
@@ -33,11 +33,11 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
                 }
             });
         }
-        
+
         $scope.selectedTransducers=[];
-        
+
         $scope.sendDeviceConfig = function(){
-            console.log($scope.selectedDevice)
+            console.log($scope.devices.selectedDevice)
             var selectedTransducers=[]
             var errorFlag=false
             angular.forEach( $scope.transducers, function(value,key){
@@ -73,20 +73,19 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
                     //    "echosounder": "4C:00:00:01"
                     //}];
                     //$scope.deviceConfigStatus = $scope.deviceConfigStatus[0];
-                    //ends                                       
+                    //ends
 
                     $scope.showLoading = true;
-                    sendDeviceConfigFactory.sendData($scope.selectedDevice, selectedTransducers, function (success) { 
+                    sendDeviceConfigFactory.sendData($scope.devices.selectedDevice,$scope.selectedTransmitPower,$scope.pingModes.selectedMode,$scope.pingInterval,selectedTransducers, function (success) {
 
                         console.log("test");
 
                         if (success) {
 
                             $scope.showLoading = false;
-                            $scope.deviceConfigStatus = sendDeviceConfigFactory.getStatus();                         
+                            $scope.deviceConfigStatus = sendDeviceConfigFactory.getStatus();
                             $scope.deviceConfigStatus = $scope.deviceConfigStatus[0];
                             console.log('success send');
-                            $scope.$apply();
 
                         } else {
 
@@ -95,7 +94,7 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
                             console.log('There was some error while retriving device config status')
 
                         }
-
+                        $scope.$apply();//this should be here so, that even error cases get applied
                     });
 
                 }
@@ -111,7 +110,7 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
         $timeout(function () {
 
             //this code should be uncommented when working with real data
-            $scope.showLoading = false;
+            $scope.showLoading = true;  //shows loading symbol
 
             deviceListFactory.loadData(function (success) {
 
@@ -119,15 +118,11 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
 
                     $scope.showLoading = false;
                     $scope.deviceList = deviceListFactory.getData();
-                    $scope.devicesName = [];
-
-                    angular.forEach($scope.deviceList, function (value, key) {
-                        $scope.devicesName.push(Object.keys(value)[0]);
+                    $scope.devices={"names":[],"selectedDevice":""}
+                    angular.forEach($scope.deviceList, function(value, key) {
+                        $scope.devices.names.push(Object.keys(value)[0]);
                     });
-
-                    $scope.selectedDevice = $scope.devicesName[0];
-
-                    $scope.$apply();
+                    $scope.devices.selectedDevice =$scope.devices.names[0]
 
                 } else {
 
@@ -135,10 +130,12 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
                     $scope.showLoadError = true;
                     console.log("There was an error while retrieving device list");
 
+
                 }
+                $scope.$apply();    //this should be here so, that even error cases get applied
 
             });
-           
+
                          //deviceListFactory.loadData()
                          //   .then(function (response) {
                          //       $scope.showLoading = false;
@@ -163,6 +160,6 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
             });
             $scope.selectedDevice = $scope.devicesName[0]
             //-------------------*/
-        });        
+        });
 
     }]);

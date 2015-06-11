@@ -13,13 +13,13 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
                 transducers: 'transducers',
                 transmitPower:'transmitPower',
                 pingMode: 'pingMode',
-                pingInterval:'pingInterval',
+                pingInterval:'pingInterval'
 
             };
 
         }        
 
-        DeviceConfig.prototype.sendData = function (callback_function, device,transmitPower,pingMode,pingInterval,transducers) {
+        DeviceConfig.prototype.sendData = function (device,transmitPower,pingMode,pingInterval,transducers,callback_function) {
 
             var params = {};
 
