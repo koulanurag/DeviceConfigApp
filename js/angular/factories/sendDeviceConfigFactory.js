@@ -20,7 +20,7 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
         }        
 
         DeviceConfig.prototype.sendData = function (device,transmitPower,pingMode,pingInterval,transducers,callback_function) {
-
+            
             var params = {};
 
             if (device !== '') {
@@ -40,19 +40,21 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
             }
 
             //var ws = new WebSocket("ws://localhost:8080");
-            var ws = new_websocket();
-
-            ws.onopen = function () {
-                ws.send(params);
-            }
+            var ws = new_websocket();            
+            
             ws.onmessage = function (event) {
+
+                console.log("recieved response from server");
+
                 DeviceConfig.prototype.sendDataSuccess(event);
                 callback_function(true);
             };
 
             ws.onerror = function (event) {
                 callback_function(false);
-            };            
+            };
+
+            ws.send(params);
 
             /*return $http(
                 {
