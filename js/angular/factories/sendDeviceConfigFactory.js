@@ -45,34 +45,34 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
 
             //var ws = new WebSocket("ws://localhost:8080");
             var ws = new_websocket();            
-            
-            ws.onmessage = function (event) {
-                
-                DeviceConfig.prototype.sendDataSuccess(event);
-                callback_function(true);
-                console.log("websocket: message", event);
-
-            };
 
             ws.onerror = function (event) {
                 callback_function(false);
                 console.log("websocket: error");
             };
+            
+            ws.onmessage = function (event) {
+                
+                DeviceConfig.prototype.sendDataSuccess(JSON.parse(event.data));
+                callback_function(true);
+                console.log("websocket: message", event);
 
-            ws.send(params);
-            console.log("websocket: send", params);
-            /*return $http(
-                {
-                    method: this.defaults.endpointGETMethod,
-                    url: this.defaults.endpointURL,
-                    params: params,
-                    cache: false
-                }
-            ).then($.proxy(DeviceConfig.prototype.sendDataSuccess, this));*/
+            };
+
+            var jsonrpc_method = {};
+            jsonrpc_method.jsonrpc = "2.0";
+            jsonrpc_method.method = "configure";
+            jsonrpc_method.params = [];
+            jsonrpc_method.params[0] = JSON.stringify(params);
+            jsonrpc_method.id = "10";
+
+            ws.send(JSON.stringify(jsonrpc_method));
+            console.log("websocket: send", jsonrpc_method);
+
         };
 
         DeviceConfig.prototype.sendDataSuccess = function (response) {
-            this.status = JSON.parse(response.data);
+            this.status = JSON.parse(response.result);
             console.log('loadDataSuccess')
         };
 

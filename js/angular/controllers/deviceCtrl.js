@@ -6,18 +6,18 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
         $scope.showLoading = false;
         $scope.devices={"names":[],"selectedDevice":{"name":"","status":true}};
         $scope.transducers=[{"id":1,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
-					{"id":2,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
-					{"id":3,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
-					{"id":4,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
-					{"id":5,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
-					{"id":6,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false}
-					];
-	    $scope.transmitPowers=[12.5,100,200];//units is Watts
-	    $scope.selectedTransmitPower=$scope.transmitPowers[0];//initialization
-	    $scope.pingModes={"modes":['Sync','Auto'],"selectedMode":"Sync"};
-	    $scope.pingInterval ={"min":100,"max":10000,"step":100,"value":100};
+                    {"id":2,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
+                    {"id":3,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
+                    {"id":4,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
+                    {"id":5,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
+                    {"id":6,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false}
+                    ];
+        $scope.transmitPowers=[12.5,100,200];//units is Watts
+        $scope.selectedTransmitPower=$scope.transmitPowers[0];//initialization
+        $scope.pingModes={"modes":['Sync','Auto'],"selectedMode":"Sync"};
+        $scope.pingInterval ={"min":100,"max":10000,"step":100,"value":100};
 
-		$scope.disableSubmitButton=false;
+        $scope.disableSubmitButton=false;
         $scope.validateTransducerDetail = function(id){
             angular.forEach( $scope.transducers, function(value,key){
                 if(value.id == id){
@@ -82,9 +82,8 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
 
                         if (success) {
 
-                            $scope.showLoading = false;
+                            $scope.showLoading = false;                            
                             $scope.deviceConfigStatus = sendDeviceConfigFactory.getStatus();
-                            $scope.deviceConfigStatus = $scope.deviceConfigStatus[0];
                             console.log('success send');
 
                         } else {
@@ -122,18 +121,19 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
 
                     $scope.showLoading = false;
                     $scope.deviceList = deviceListFactory.getData();
-                    $scope.devices={"names":[],"selectedDevice":{"name":"","status":true}}//status--> true ==>start and status--> false ==>stop and initialy it is true
-                    angular.forEach($scope.deviceList, function(value, key) {
-                        $scope.devices.names.push(Object.keys(value)[0]);
+                    //status--> true ==>start and status--> false ==>stop and initialy it is true
+                    $scope.devices = { "names": [], "selectedDevice": { "name": "", "status": true } }
+
+                    angular.forEach($scope.deviceList['CageEye mk.III'], function (value, key) {                        
+                        $scope.devices.names.push(value);
                     });
-                    $scope.devices.selectedDevice.name =$scope.devices.names[0]
+                    $scope.devices.selectedDevice.name = $scope.devices.names[0];
 
                 } else {
 
                     $scope.showLoading = false;
                     $scope.showLoadError = true;
                     console.log("There was an error while retrieving device list");
-
 
                 }
                 $scope.$apply();    //this should be here so, that even error cases get applied
