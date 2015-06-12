@@ -47,19 +47,20 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
             var ws = new_websocket();            
             
             ws.onmessage = function (event) {
-
-                console.log("recieved response from server");
-
+                
                 DeviceConfig.prototype.sendDataSuccess(event);
                 callback_function(true);
+                console.log("websocket: message", event);
+
             };
 
             ws.onerror = function (event) {
                 callback_function(false);
+                console.log("websocket: error");
             };
 
             ws.send(params);
-
+            console.log("websocket: send", params);
             /*return $http(
                 {
                     method: this.defaults.endpointGETMethod,

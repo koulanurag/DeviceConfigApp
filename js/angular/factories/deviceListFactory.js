@@ -24,17 +24,20 @@ ngDevices.factory('deviceListFactory', [ '$http',
 
             ws.onopen = function () {                
                 ws.send("whatever"); // retrive device list
+                console.log("websocket: send 'whatever'");
             };
 
             ws.onmessage = function (event) {
 
                 DeviceList.prototype.loadDataSuccess(event);
-                callback_function(true);                
+                callback_function(true);
+                console.log("websocket: message", event);
 
             };
 
             ws.onerror = function (event) {
                 callback_function(false);
+                console.log("websocket: error");
             };
             
  /*          return $http(

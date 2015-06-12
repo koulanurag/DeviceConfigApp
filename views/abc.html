@@ -91,7 +91,7 @@
     <div class="content" ng-if="!showLoadError && !showLoading">
         <div class="device-control">
             <span class="pull-left">{{"Device : " + deviceConfigStatus.echosounder}}</span>
-            <i class="icon-button pull-right" data-ng-class="{'fa fa-play':devices.selectedDevice.status,'fa fa-stop':!devices.selectedDevice.status}" data-ng-if="showLoadError" data-ng-click="changeStatus()"></i>
+            <i class="icon-button pull-right" data-ng-class="{'fa fa-play':devices.selectedDevice.status,'fa fa-stop':!devices.selectedDevice.status}" data-ng-click="changeStatus()"></i>
         </div>
         <table class="table status-table">
             <tr>
