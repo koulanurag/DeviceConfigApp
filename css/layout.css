@@ -1,3 +1,15 @@
+.icon-button{
+    border: 1px solid;
+    padding: 4px;
+    background-color: rgb(216, 216, 216);
+    border-color: rgb(162, 162, 162);
+}
+.icon-button:hover{
+    background-color:rgb(179, 179, 179);
+}
+.device-control{
+    padding-bottom: 13px;
+}
 .echosounder-table{
     width: 80%;
     text-align: center;

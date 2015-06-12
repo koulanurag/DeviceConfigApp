@@ -4,7 +4,7 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
 
         $scope.showLoadError = false;
         $scope.showLoading = false;
-
+        $scope.devices={"names":[],"selectedDevice":{"name":"","status":true}};
         $scope.transducers=[{"id":1,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
 					{"id":2,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
 					{"id":3,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
@@ -35,9 +35,9 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
         }
 
         $scope.selectedTransducers=[];
-
+        
         $scope.sendDeviceConfig = function(){
-            console.log($scope.devices.selectedDevice)
+            console.log($scope.devices.selectedDevice.name)
             var selectedTransducers=[]
             var errorFlag=false
             angular.forEach( $scope.transducers, function(value,key){
@@ -76,7 +76,7 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
                     //ends
 
                     $scope.showLoading = true;
-                    sendDeviceConfigFactory.sendData($scope.devices.selectedDevice,$scope.selectedTransmitPower,$scope.pingModes.selectedMode,$scope.pingInterval,selectedTransducers, function (success) {
+                    sendDeviceConfigFactory.sendData($scope.devices.selectedDevice.name,$scope.devices.selectedDevice.status,$scope.selectedTransmitPower,$scope.pingModes.selectedMode,$scope.pingInterval,selectedTransducers, function (success) {
 
                         console.log("test");
 
@@ -88,7 +88,6 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
                             console.log('success send');
 
                         } else {
-
                             $scope.showLoading = false;
                             $scope.showLoadError = true;
                             console.log('There was some error while retriving device config status')
@@ -107,6 +106,11 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
             }
 
         }
+        
+        $scope.changeStatus = function(){
+            $scope.devices.selectedDevice.status=!$scope.devices.selectedDevice.status
+            $scope.sendDeviceConfig()
+        }
         $timeout(function () {
 
             //this code should be uncommented when working with real data
@@ -118,11 +122,11 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
 
                     $scope.showLoading = false;
                     $scope.deviceList = deviceListFactory.getData();
-                    $scope.devices={"names":[],"selectedDevice":""}
+                    $scope.devices={"names":[],"selectedDevice":{"name":"","status":true}}//status--> true ==>start and status--> false ==>stop and initialy it is true
                     angular.forEach($scope.deviceList, function(value, key) {
                         $scope.devices.names.push(Object.keys(value)[0]);
                     });
-                    $scope.devices.selectedDevice =$scope.devices.names[0]
+                    $scope.devices.selectedDevice.name =$scope.devices.names[0]
 
                 } else {
 

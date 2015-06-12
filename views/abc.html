@@ -16,7 +16,7 @@
     </div>
     <div class="content" ng-if="!showLoadError && !showLoading">
         <span class="custom-dropdown big">
-            <select data-ng-options="deviceName for deviceName in devices.names" data-ng-model="devices.selectedDevice" ></select>
+            <select data-ng-options="deviceName for deviceName in devices.names" data-ng-model="devices.selectedDevice.name" ></select>
         </span>
         
     </div>
@@ -24,7 +24,7 @@
   </fieldset>
   <fieldset>
     <h2 class="fs-title">Configure EchoSouder</h2>
-    <h3 class="fs-subtitle">Device : {{devices.selectedDevice}}</h3>
+    <h3 class="fs-subtitle">Device : {{devices.selectedDevice.name}}</h3>
     <table class="table echosounder-table">
         <thead>
             <tr>
@@ -89,7 +89,10 @@
         <i class="fa fa-warning fa" data-ng-if="showLoadError">Sorry, Something went Wrong</i>
     </div>
     <div class="content" ng-if="!showLoadError && !showLoading">
-    {{"Device : " + deviceConfigStatus.echosounder}}
+        <div class="device-control">
+            <span class="pull-left">{{"Device : " + deviceConfigStatus.echosounder}}</span>
+            <i class="icon-button pull-right" data-ng-class="{'fa fa-play':devices.selectedDevice.status,'fa fa-stop':!devices.selectedDevice.status}" data-ng-if="showLoadError" data-ng-click="changeStatus()"></i>
+        </div>
         <table class="table status-table">
             <tr>
                 <th>Name</th>
