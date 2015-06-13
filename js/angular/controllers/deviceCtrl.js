@@ -83,10 +83,7 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
 
                             $scope.showLoading = false;                            
                             $scope.deviceConfigStatus = sendDeviceConfigFactory.getStatus();
-                            //$scope.deviceConfigStatus = $scope.deviceConfigStatus[0];
-                            debugger;
-                            console.log($scope.deviceConfigStatus);
-                            console.log('success send');
+                            console.log("sendData result: ", $scope.deviceConfigStatus);                            
 
                         } else {
                             $scope.showLoading = false;
@@ -122,10 +119,8 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
                             function(success, result){
                                 if (success) {
                                     //{echosounder: "4111-0000", transducerName: "etet", window: true}
-                                    value.window = result.window; //sendDeviceConfigFactory.getWindowStatus();
-                                    console.log("windowstatus result: ", result);
-                                    //console.log("window value: ", value.window);
-                                    //debugger;
+                                    value.window = result.window;
+                                    console.log("windowstatus result: ", result);                                    
                                 }
                                 else{
                                     value.window="error"
@@ -147,8 +142,7 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
                             function(success, result){
                                 if (success){
                                     value.recording = result.recording;
-                                    console.log("recordingstatus result: ", result);
-                                    //sendDeviceConfigFactory.getRecordingStatus()//may be we need to change it  if backedn send json having other info too
+                                    console.log("recordingstatus result: ", result);                                 
                                 }
                                 else{
                                     value.recording="error"

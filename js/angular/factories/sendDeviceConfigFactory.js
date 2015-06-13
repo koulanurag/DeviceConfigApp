@@ -42,23 +42,8 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
             if (transducers !== '') {
                 params[this.defaults.transducers] = transducers;
             }
-
-            //var ws = new WebSocket("ws://localhost:8080");
-            var ws = new_websocket();            
-
-            ws.onerror = function (event) {
-                callback_function(false);
-                console.log("websocket: error");
-            };
             
-            ws.onmessage = function (event) {
-                
-                console.log("ws.onmessage: sendData", event);
-                console.log("websocket: message", event);
-                DeviceConfig.prototype.sendDataSuccess(JSON.parse(event.data));
-                callback_function(true);                
-
-            };
+            var ws = new_websocket();            
 
             var jsonrpc_method = {};
             jsonrpc_method.jsonrpc = "2.0";
@@ -67,8 +52,25 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
             jsonrpc_method.params[0] = JSON.stringify(params);
             jsonrpc_method.id = "10";
 
-            ws.send(JSON.stringify(jsonrpc_method));
+            ws.onerror = function (event) {
+                console.log("websocket: error");
+                callback_function(false);                
+            };
+            
+            ws.onmessage = function (event) {
+                                                
+                var response = JSON.parse(event.data);
+                console.log("websocket: onmessage", response);
+
+                if (response.id == jsonrpc_method.id) {
+                    DeviceConfig.prototype.sendDataSuccess(response);
+                    callback_function(true);
+                }                
+
+            };            
+
             console.log("websocket: send", jsonrpc_method);
+            ws.send(JSON.stringify(jsonrpc_method));            
 
         };
 
@@ -95,28 +97,33 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
             }
             var ws = new_websocket();
             
-            ws.onerror = function (event) {
-                callback_function(false, null);
-                console.log("websocket: error");
-            };
-            
-            ws.onmessage = function (event) {
-                
-                console.log("websocket: message", event);
-                var result = JSON.parse(JSON.parse(event.data).result); //it can be improved                
-                callback_function(true, result);
-
-            };
-
             var jsonrpc_method = {};
             jsonrpc_method.jsonrpc = "2.0";
             jsonrpc_method.method = "changeRecordingStatus";
             jsonrpc_method.params = [];
             jsonrpc_method.params[0] = JSON.stringify(params);
-            jsonrpc_method.id = "10"; //may be it has to bechanged
+            jsonrpc_method.id = "11";
 
-            ws.send(JSON.stringify(jsonrpc_method));
+            ws.onerror = function (event) {
+                console.log("websocket: error");
+                callback_function(false, null);                
+            };
+            
+            ws.onmessage = function (event) {
+                
+                var response = JSON.parse(event.data);
+                console.log("websocket: message", response);
+
+                var json_result = JSON.parse(response.result);
+                
+                if (response.id == jsonrpc_method.id) {
+                    callback_function(true, json_result);
+                }
+
+            };            
+
             console.log("websocket: send", jsonrpc_method);
+            ws.send(JSON.stringify(jsonrpc_method));            
 
         };
         DeviceConfig.prototype.getRecordingStatus = function () {
@@ -136,29 +143,34 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
                 params[this.defaults.newWindowStatus] = newWindowStatus;
             }
             var ws = new_websocket();
-            
-            ws.onerror = function (event) {
-                callback_function(false, null);
-                console.log("websocket: error");
-            };
-            
-            ws.onmessage = function (event) {
-
-                console.log("websocket: message", event);
-                var result = JSON.parse(JSON.parse(event.data).result);//it can be improved
-                callback_function(true, result);                
-
-            };
 
             var jsonrpc_method = {};
             jsonrpc_method.jsonrpc = "2.0";
             jsonrpc_method.method = "changeWindowStatus";
             jsonrpc_method.params = [];
             jsonrpc_method.params[0] = JSON.stringify(params);
-            jsonrpc_method.id = "10"; //may be it has to bechanged
+            jsonrpc_method.id = "12";
+            
+            ws.onerror = function (event) {
+                console.log("websocket: error");
+                callback_function(false, null);                
+            };
+            
+            ws.onmessage = function (event) {
 
-            ws.send(JSON.stringify(jsonrpc_method));
+                var response = JSON.parse(event.data);
+                console.log("websocket: message", response);
+
+                var json_result = JSON.parse(response.result);
+
+                if (response.id == jsonrpc_method.id) {
+                    callback_function(true, json_result);
+                }
+
+            };            
+
             console.log("websocket: send", jsonrpc_method);
+            ws.send(JSON.stringify(jsonrpc_method));            
 
         };
         DeviceConfig.prototype.getWindowStatus = function () {

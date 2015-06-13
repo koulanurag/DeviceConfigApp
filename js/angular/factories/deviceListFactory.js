@@ -18,36 +18,37 @@ ngDevices.factory('deviceListFactory', [ '$http',
         DeviceList.prototype.loadData = function (callback_function) {
 
             var params = {};
-
-            //var ws = new WebSocket("ws://localhost:8080");
+            
             var ws = new_websocket(); 
 
+            var jsonrpc_method = {};
+            jsonrpc_method.jsonrpc = "2.0";
+            jsonrpc_method.method = "get_echosounder_list";
+            jsonrpc_method.params = [];            
+            jsonrpc_method.id = "2";
+
             ws.onerror = function (event) {
-                callback_function(false);
                 console.log("websocket: error");
+                callback_function(false);
             };
 
             ws.onmessage = function (event) {
 
-                console.log("websocket: message", event);
+                console.log("websocket: onmessage", event);
+                var response = JSON.parse(event.data);
 
-                var received_json_message = JSON.parse(event.data);
-
-                if (received_json_message.result) {
-
-                    DeviceList.prototype.loadDataSuccess(received_json_message);
+                if (response.id == jsonrpc_method.id) {
+                    DeviceList.prototype.loadDataSuccess(response);
                     callback_function(true);
-
                 };
                 
             };
 
             ws.onopen = function () {
                 
-                setTimeout(function () {
-                    // retrive device list
-                    ws.send("{\"jsonrpc\": \"2.0\", \"method\": \"get_echosounder_list\", \"params\": [], \"id\": 1}");
-                    console.log("websocket: send 'get_echosounder_list'");
+                setTimeout(function () {                    
+                    console.log("websocket: send", jsonrpc_method);
+                    ws.send(JSON.stringify(jsonrpc_method));
                 }, 1000);
 
             };
