@@ -83,6 +83,9 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
 
                             $scope.showLoading = false;                            
                             $scope.deviceConfigStatus = sendDeviceConfigFactory.getStatus();
+                            //$scope.deviceConfigStatus = $scope.deviceConfigStatus[0];
+                            debugger;
+                            console.log($scope.deviceConfigStatus);
                             console.log('success send');
 
                         } else {
@@ -116,9 +119,13 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
                         var previousWindowStatus=value.window
                         value.window ="refreshing"
                         sendDeviceConfigFactory.changeWindowStatus($scope.devices.selectedDevice.name,value.name,!previousWindowStatus,
-                            function(success){
-                                if (success){
-                                    value.window=sendDeviceConfigFactory.getWindowStatus()
+                            function(success, result){
+                                if (success) {
+                                    //{echosounder: "4111-0000", transducerName: "etet", window: true}
+                                    value.window = result.window; //sendDeviceConfigFactory.getWindowStatus();
+                                    console.log("windowstatus result: ", result);
+                                    //console.log("window value: ", value.window);
+                                    //debugger;
                                 }
                                 else{
                                     value.window="error"
@@ -136,10 +143,12 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
                 if(value.name == transducerName){
                         var previousRecordingStatus=value.recording
                         value.recording ="refreshing"
-                        sendDeviceConfigFactory.changeWindowStatus($scope.devices.selectedDevice.name,value.name,!previousRecordingStatus,
-                            function(success){
+                        sendDeviceConfigFactory.changeRecordingStatus($scope.devices.selectedDevice.name,value.name,!previousRecordingStatus,
+                            function(success, result){
                                 if (success){
-                                    value.recording = sendDeviceConfigFactory.getRecordingStatus()//may be we need to change it  if backedn send json having other info too
+                                    value.recording = result.recording;
+                                    console.log("recordingstatus result: ", result);
+                                    //sendDeviceConfigFactory.getRecordingStatus()//may be we need to change it  if backedn send json having other info too
                                 }
                                 else{
                                     value.recording="error"

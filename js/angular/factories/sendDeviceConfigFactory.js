@@ -12,7 +12,9 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
                 pingMode: 'pingMode',
                 pingInterval:'pingInterval',
                 transducerName:'transducerName',
-                newRecordingStatus:'newRecordingStatus'
+                newRecordingStatus: 'newRecordingStatus',
+                newWindowStatus: 'newWindowStatus'
+
 
             };
 
@@ -51,9 +53,10 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
             
             ws.onmessage = function (event) {
                 
-                DeviceConfig.prototype.sendDataSuccess(JSON.parse(event.data));
-                callback_function(true);
+                console.log("ws.onmessage: sendData", event);
                 console.log("websocket: message", event);
+                DeviceConfig.prototype.sendDataSuccess(JSON.parse(event.data));
+                callback_function(true);                
 
             };
 
@@ -69,9 +72,9 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
 
         };
 
-        DeviceConfig.prototype.sendDataSuccess = function (response) {
+        DeviceConfig.prototype.sendDataSuccess = function (response) {            
+            console.log('loadDataSuccess response:', response)
             this.status = JSON.parse(response.result);
-            console.log('loadDataSuccess')
         };
 
         DeviceConfig.prototype.getStatus = function () {
@@ -93,14 +96,15 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
             var ws = new_websocket();
             
             ws.onerror = function (event) {
-                callback_function(false);
+                callback_function(false, null);
                 console.log("websocket: error");
             };
             
             ws.onmessage = function (event) {
-                this.recordingStatus = JSON.parse(JSON.parse(event.data).result);//it can be improved
-                callback_function(true);
+                
                 console.log("websocket: message", event);
+                var result = JSON.parse(JSON.parse(event.data).result); //it can be improved                
+                callback_function(true, result);
 
             };
 
@@ -134,14 +138,15 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
             var ws = new_websocket();
             
             ws.onerror = function (event) {
-                callback_function(false);
+                callback_function(false, null);
                 console.log("websocket: error");
             };
             
             ws.onmessage = function (event) {
-                this.windowStatus = JSON.parse(JSON.parse(event.data).result);//it can be improved
-                callback_function(true);
+
                 console.log("websocket: message", event);
+                var result = JSON.parse(JSON.parse(event.data).result);//it can be improved
+                callback_function(true, result);                
 
             };
 
@@ -157,6 +162,7 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
 
         };
         DeviceConfig.prototype.getWindowStatus = function () {
+            console.log("getWindowStatus", this.windowStatus);
             return this.windowStatus;
         };
         return new DeviceConfig();
