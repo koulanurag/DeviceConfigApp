@@ -1,16 +1,15 @@
 ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', 'sendDeviceConfigFactory',
     function ($scope, $timeout, deviceListFactory, sendDeviceConfigFactory) {
 
-
         $scope.showLoadError = false;
         $scope.showLoading = false;
         $scope.devices={"names":[],"selectedDevice":{"name":"","status":true}};
-        $scope.transducers=[{"id":1,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
-                    {"id":2,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
-                    {"id":3,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
-                    {"id":4,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
-                    {"id":5,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false},
-                    {"id":6,"enable":false,"name":"","depth":"","recording":false,"view":false,"error":false}
+        $scope.transducers=[{"id":1,"enable":false,"name":"","depth":"","recording":false,'window':false,"view":false,"error":false},
+                    {"id":2,"enable":false,"name":"","depth":"","recording":false,'window':false,"view":false,"error":false},
+                    {"id":3,"enable":false,"name":"","depth":"","recording":false,'window':false,"view":false,"error":false},
+                    {"id":4,"enable":false,"name":"","depth":"","recording":false,'window':false,"view":false,"error":false},
+                    {"id":5,"enable":false,"name":"","depth":"","recording":false,'window':false,"view":false,"error":false},
+                    {"id":6,"enable":false,"name":"","depth":"","recording":false,'window':false,"view":false,"error":false}
                     ];
         $scope.transmitPowers=[12.5,100,200];//units is Watts
         $scope.selectedTransmitPower=$scope.transmitPowers[0];//initialization
@@ -110,6 +109,48 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
             $scope.devices.selectedDevice.status=!$scope.devices.selectedDevice.status
             $scope.sendDeviceConfig()
         }
+        $scope.changeWindowStatus = function(device,transducerName){
+            var transducer;
+            angular.forEach($scope.deviceConfigStatus.transducers, function(value,key){
+                if(value.name == transducerName){
+                        var previousWindowStatus=value.window
+                        value.window ="refreshing"
+                        sendDeviceConfigFactory.changeWindowStatus($scope.devices.selectedDevice.name,value.name,!previousWindowStatus,
+                            function(success){
+                                if (success){
+                                    value.window=sendDeviceConfigFactory.getWindowStatus()
+                                }
+                                else{
+                                    value.window="error"
+                                }
+                                $scope.$apply();
+                            })
+                    return false;    
+                }
+            });
+            
+        }
+        $scope.changeRecordingStatus = function(device,transducerName){
+            console.log($scope.deviceConfigStatus)
+            angular.forEach($scope.deviceConfigStatus.transducers, function(value,key){
+                if(value.name == transducerName){
+                        var previousRecordingStatus=value.recording
+                        value.recording ="refreshing"
+                        sendDeviceConfigFactory.changeWindowStatus($scope.devices.selectedDevice.name,value.name,!previousRecordingStatus,
+                            function(success){
+                                if (success){
+                                    value.recording = sendDeviceConfigFactory.getRecordingStatus()//may be we need to change it  if backedn send json having other info too
+                                }
+                                else{
+                                    value.recording="error"
+                                }
+                                $scope.$apply();
+                            })
+                    return false;     
+                }
+            });
+        }
+        
         $timeout(function () {
 
             //this code should be uncommented when working with real data
