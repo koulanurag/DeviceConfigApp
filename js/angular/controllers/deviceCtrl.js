@@ -138,7 +138,7 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
                 if(value.name == transducerName){
                         var previousRecordingStatus=value.recording
                         value.recording ="refreshing"
-                        sendDeviceConfigFactory.changeRecordingStatus($scope.devices.selectedDevice.name,value.name,!previousRecordingStatus,
+                        sendDeviceConfigFactory.changeRecordingStatus($scope.devices.selectedDevice.name,value.name,value.hardware_channel,value.software_channel,!previousRecordingStatus,
                             function(success, result){
                                 if (success){
                                     value.recording = result.recording;

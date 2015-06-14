@@ -13,8 +13,9 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
                 pingInterval:'pingInterval',
                 transducerName:'transducerName',
                 newRecordingStatus: 'newRecordingStatus',
-                newWindowStatus: 'newWindowStatus'
-
+                newWindowStatus: 'newWindowStatus',
+                hardwareChannel:'hardware_channel',
+                softwareChannel:'software_channel'
 
             };
 
@@ -82,7 +83,7 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
         DeviceConfig.prototype.getStatus = function () {
             return this.status;
         };
-        DeviceConfig.prototype.changeRecordingStatus = function (device,transducerName,newRecordingStatus,callback_function) {
+        DeviceConfig.prototype.changeRecordingStatus = function (device,transducerName,hardwareChannel,softwareChannel,newRecordingStatus,callback_function) {
             
             var params = {};
 
@@ -91,6 +92,12 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
             }
             if (transducerName !== '') {
                 params[this.defaults.transducerName] = transducerName;
+            }
+            if (hardwareChannel !== '') {
+                params[this.defaults.hardwareChannel] = hardwareChannel;
+            }
+            if (softwareChannel !== '') {
+                params[this.defaults.softwareChannel] = softwareChannel;
             }
             if (newRecordingStatus !== '') {
                 params[this.defaults.newRecordingStatus] = newRecordingStatus;
@@ -129,7 +136,7 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
         DeviceConfig.prototype.getRecordingStatus = function () {
             return this.recordingStatus;
         };
-        DeviceConfig.prototype.changeWindowStatus = function (device,transducerName,newWindowStatus,callback_function) {
+        DeviceConfig.prototype.changeWindowStatus = function (device,transducerName,hardwareChannel,softwareChannel,newWindowStatus,callback_function) {
             
             var params = {};
 
@@ -138,6 +145,12 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
             }
             if (transducerName !== '') {
                 params[this.defaults.transducerName] = transducerName;
+            }
+            if (hardwareChannel !== '') {
+                params[this.defaults.hardwareChannel] = hardwareChannel;
+            }
+            if (softwareChannel !== '') {
+                params[this.defaults.softwareChannel] = softwareChannel;
             }
             if (newWindowStatus !== '') {
                 params[this.defaults.newWindowStatus] = newWindowStatus;
