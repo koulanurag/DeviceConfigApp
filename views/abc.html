@@ -68,11 +68,9 @@
              </div>
         </div>
       <input type="checkbox" data-ng-model="t.enable" data-ng-change="validateTransducerDetail(t.id)"/>
-      <input type="text" data-ng-model="t.name" placeholder="Name of Transducer" />
-      <input type="number" data-ng-model="t.depth" placeholder="Depth of Transducer" />
-      <i data-ng-class="{'fa fa-microphone':t.recording==true,'fa fa-microphone-slash':t.recording==false}">
-          <input type="checkbox" data-ng-model="t.recording"/>
-      </i>
+      <input type="text" data-ng-model="t.name" placeholder="Name" />
+      <input type="number" data-ng-model="t.depth" placeholder="Depth" />
+      <input type="number" data-ng-model="t.hardware_channel" placeholder="H Channel" />
       <i data-ng-class="{'fa fa-arrow-circle-up':t.view==true,'fa fa-arrow-circle-down':t.view==false}">
           <input type="checkbox" data-ng-model="t.view"/>
       </i>
