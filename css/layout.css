@@ -25,7 +25,7 @@
 
 .form-error-tooltip {
   opacity: 1;
-  margin-left: -36px !important;
+  margin-left: -77px !important;
   margin-top: 5px;
 }
 .status-table{
@@ -179,6 +179,9 @@ body {
   font-size: 13px;
 }
 /*buttons*/
+#msform input{
+    max-width: 150px;
+}
 
 #msform .action-button {
   width: 100px;

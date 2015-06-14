@@ -4,12 +4,12 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
         $scope.showLoadError = false;
         $scope.showLoading = false;
         $scope.devices={"names":[],"selectedDevice":{"name":"","status":true}};
-        $scope.transducers=[{"id":1,"enable":false,"name":"","depth":"","recording":false,'window':false,"view":false,"error":false},
-                    {"id":2,"enable":false,"name":"","depth":"","recording":false,'window':false,"view":false,"error":false},
-                    {"id":3,"enable":false,"name":"","depth":"","recording":false,'window':false,"view":false,"error":false},
-                    {"id":4,"enable":false,"name":"","depth":"","recording":false,'window':false,"view":false,"error":false},
-                    {"id":5,"enable":false,"name":"","depth":"","recording":false,'window':false,"view":false,"error":false},
-                    {"id":6,"enable":false,"name":"","depth":"","recording":false,'window':false,"view":false,"error":false}
+        $scope.transducers=[{"id":1,"enable":false,"name":"","depth":"",'hardware_channel':'',"recording":false,'window':false,"view":false,"error":false},
+                    {"id":2,"enable":false,"name":"","depth":"",'hardware_channel':'',"recording":false,'window':false,"view":false,"error":false},
+                    {"id":3,"enable":false,"name":"","depth":"",'hardware_channel':'',"recording":false,'window':false,"view":false,"error":false},
+                    {"id":4,"enable":false,"name":"","depth":"",'hardware_channel':'',"recording":false,'window':false,"view":false,"error":false},
+                    {"id":5,"enable":false,"name":"","depth":"",'hardware_channel':'',"recording":false,'window':false,"view":false,"error":false},
+                    {"id":6,"enable":false,"name":"","depth":"",'hardware_channel':'',"recording":false,'window':false,"view":false,"error":false}
                     ];
         $scope.transmitPowers=[12.5,100,200];//units is Watts
         $scope.selectedTransmitPower=$scope.transmitPowers[0];//initialization
@@ -20,7 +20,7 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
         $scope.validateTransducerDetail = function(id){
             angular.forEach( $scope.transducers, function(value,key){
                 if(value.id == id){
-                    if (value.name =="" || value.depth==""){
+                    if (value.name =="" || value.depth=="" || value.hardware_channel==""){
                         value.enable=false;
                         value.error=true;
                         console.log("fill details..")
@@ -45,7 +45,7 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
                        value.error=true
                        errorFlag=true
                    }else{
-                       selectedTransducers.push([value.name,value.depth,value.recording])
+                       selectedTransducers.push([value.name,value.depth,value.hardware_channel,value.recording])//may be we should change it to array of json
                        value.error=false
                    }
 
