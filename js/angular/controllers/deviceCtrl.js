@@ -4,12 +4,12 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
         $scope.showLoadError = false;
         $scope.showLoading = false;
         $scope.devices={"names":[],"selectedDevice":{"name":"","status":true}};
-        $scope.transducers=[{"id":1,"enable":false,"name":"","depth":"",'hardware_channel':'',"recording":false,'window':false,"view":false,"error":false},
-                    {"id":2,"enable":false,"name":"","depth":"",'hardware_channel':'',"recording":false,'window':false,"view":false,"error":false},
-                    {"id":3,"enable":false,"name":"","depth":"",'hardware_channel':'',"recording":false,'window':false,"view":false,"error":false},
-                    {"id":4,"enable":false,"name":"","depth":"",'hardware_channel':'',"recording":false,'window':false,"view":false,"error":false},
-                    {"id":5,"enable":false,"name":"","depth":"",'hardware_channel':'',"recording":false,'window':false,"view":false,"error":false},
-                    {"id":6,"enable":false,"name":"","depth":"",'hardware_channel':'',"recording":false,'window':false,"view":false,"error":false}
+        $scope.transducers=[{"id":1,"enable":false,'hardware_channel':1,"name":"","depth":"","recording":false,'window':false,"view":false,"error":false},
+                    { "id": 2, "enable": false, 'hardware_channel': 2, "name": "", "depth": "", "recording": false, 'window': false, "view": false, "error": false },
+                    { "id": 3, "enable": false, 'hardware_channel': 3, "name": "", "depth": "", "recording": false, 'window': false, "view": false, "error": false },
+                    { "id": 4, "enable": false, 'hardware_channel': 4, "name": "", "depth": "", "recording": false, 'window': false, "view": false, "error": false },
+                    { "id": 5, "enable": false, 'hardware_channel': 5, "name": "", "depth": "", "recording": false, 'window': false, "view": false, "error": false },
+                    { "id": 6, "enable": false, 'hardware_channel': 6, "name": "", "depth": "", "recording": false, 'window': false, "view": false, "error": false }
                     ];
         $scope.transmitPowers=[12.5,100,200];//units is Watts
         $scope.selectedTransmitPower=$scope.transmitPowers[0];//initialization
@@ -113,20 +113,20 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
             var transducer;
             angular.forEach($scope.deviceConfigStatus.transducers, function(value,key){
                 if(value.name == transducerName){
-                        var previousWindowStatus=value.window
-                        value.window ="refreshing"
-                        sendDeviceConfigFactory.changeWindowStatus($scope.devices.selectedDevice.name,value.name,!previousWindowStatus,
-                            function(success, result){
+                    var previousWindowStatus = value.window;
+                        value.window = "refreshing";
+                        sendDeviceConfigFactory.changeWindowStatus($scope.devices.selectedDevice.name, value.name,value.hardware_channel,value.software_channel,!previousWindowStatus,
+                            function (success, result) {
                                 if (success) {
                                     //{echosounder: "4111-0000", transducerName: "etet", window: true}
                                     value.window = result.window;
-                                    console.log("windowstatus result: ", result);                                    
+                                    console.log("windowstatus result: ", result);
                                 }
-                                else{
-                                    value.window="error"
+                                else {
+                                    value.window = "error"
                                 }
                                 $scope.$apply();
-                            })
+                            });
                     return false;    
                 }
             });

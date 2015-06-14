@@ -198,7 +198,7 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
 
                     var json_result = JSON.parse(response.result);
 
-                    if (response.id == jsonrpc_method.id) {
+                    if (response.id == jsonrpc_method.id) {                        
                         callback_function(true, json_result);
                     }
 
