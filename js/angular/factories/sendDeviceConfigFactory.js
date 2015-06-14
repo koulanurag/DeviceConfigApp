@@ -57,15 +57,21 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
                 callback_function(false);                
             };
             
-            ws.onmessage = function (event) {
-                                                
-                var response = JSON.parse(event.data);
-                console.log("websocket: onmessage", response);
+            ws.onmessage = function (event) {                                                               
 
-                if (response.id == jsonrpc_method.id) {
-                    DeviceConfig.prototype.sendDataSuccess(response);
-                    callback_function(true);
-                }                
+                try {
+
+                    var response = JSON.parse(event.data);
+                    console.log("websocket: onmessage", response);
+
+                    if (response.id == jsonrpc_method.id) {
+                        DeviceConfig.prototype.sendDataSuccess(response);
+                        callback_function(true);
+                    }
+
+                } catch (e) {
+                    console.log("JSON.parse error", event, e);
+                }
 
             };            
 
@@ -75,8 +81,16 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
         };
 
         DeviceConfig.prototype.sendDataSuccess = function (response) {            
-            console.log('loadDataSuccess response:', response)
-            this.status = JSON.parse(response.result);
+            
+            try {
+
+                console.log('loadDataSuccess response:', response);
+                this.status = JSON.parse(response.result);
+
+            } catch (e) {
+                console.log("JSON.parse error", response, e);
+            }
+            
         };
 
         DeviceConfig.prototype.getStatus = function () {
@@ -111,14 +125,20 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
             
             ws.onmessage = function (event) {
                 
-                var response = JSON.parse(event.data);
-                console.log("websocket: message", response);
+                try {
 
-                var json_result = JSON.parse(response.result);
-                
-                if (response.id == jsonrpc_method.id) {
-                    callback_function(true, json_result);
-                }
+                    var response = JSON.parse(event.data);
+                    console.log("websocket: message", response);
+
+                    var json_result = JSON.parse(response.result);
+
+                    if (response.id == jsonrpc_method.id) {
+                        callback_function(true, json_result);
+                    }
+
+                } catch (e) {
+                    console.log("JSON.parse error", event, e);
+                }                
 
             };            
 
@@ -158,13 +178,19 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
             
             ws.onmessage = function (event) {
 
-                var response = JSON.parse(event.data);
-                console.log("websocket: message", response);
+                try {
 
-                var json_result = JSON.parse(response.result);
+                    var response = JSON.parse(event.data);
+                    console.log("websocket: message", response);
 
-                if (response.id == jsonrpc_method.id) {
-                    callback_function(true, json_result);
+                    var json_result = JSON.parse(response.result);
+
+                    if (response.id == jsonrpc_method.id) {
+                        callback_function(true, json_result);
+                    }
+
+                } catch (e) {
+                    console.log("JSON.parse error", event, e);
                 }
 
             };            

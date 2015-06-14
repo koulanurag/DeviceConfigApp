@@ -35,12 +35,19 @@ ngDevices.factory('deviceListFactory', [ '$http',
             ws.onmessage = function (event) {
 
                 console.log("websocket: onmessage", event);
-                var response = JSON.parse(event.data);
 
-                if (response.id == jsonrpc_method.id) {
-                    DeviceList.prototype.loadDataSuccess(response);
-                    callback_function(true);
-                };
+                try {
+                    
+                    var response = JSON.parse(event.data);
+
+                    if (response.id == jsonrpc_method.id) {
+                        DeviceList.prototype.loadDataSuccess(response);
+                        callback_function(true);
+                    };
+
+                } catch (e) {
+                    console.log("JSON.parse error", event, e);
+                }
                 
             };
 
@@ -57,7 +64,11 @@ ngDevices.factory('deviceListFactory', [ '$http',
 
         DeviceList.prototype.loadDataSuccess = function (response) {
                         
-            this.data = JSON.parse(response.result);
+            try {
+                this.data = JSON.parse(response.result);
+            } catch (e) {
+                console.log("JSON.parse error", response, e);
+            }
 
         };
 
