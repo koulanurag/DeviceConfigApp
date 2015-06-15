@@ -9,10 +9,8 @@ ngDevices.config(
                 url: '/',
                 views: {
                     'default': {
-                       // resolve: deviceFactoryResolve,
                         controller: 'deviceCtrl',
-                        //templateUrl: 'views/deviceConfig.html'
-                        templateUrl: 'views/abc.html'
+                        templateUrl: 'views/deviceConfig.html'
                     }
                 }
 

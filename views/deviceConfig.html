@@ -1,20 +1,127 @@
-<div class="deviceConfigForm">
-    Devices: 
-    <select data-ng-options="deviceName for deviceName in devicesName" data-ng-model="selectedDevice" data-ng-change="getTransducers(selectedDevice)"></select>
-
-    <div>
-        <label data-ng-show="selectedDevice!==undefined">Transducers:</label>
-        <div data-ng-repeat="transducer in transducers">
-          <div class="action-checkbox">
-               <input id="{{transducer.name}}" type="checkbox" value="{{transducer.name}}" data-ng-checked="selection.indexOf(transducer.name) > -1" data-ng-click="toggleSelection(transducer.name)" />
-               <label for="{{transducer.name}}"></label>
-               {{transducer.name}}
-          </div>
-        </div>
-        <span class="selected-item" data-ng-show='selectedTransducers.length > 0'>Selected Transducers:</span>
-        <span data-ng-repeat="name in selectedTransducers" class="selected-item">
-          {{name}}
-        </span>
+<!-- multistep form -->
+<form id="msform" data-ng-submit="sendDeviceConfig()">
+  <!-- progressbar -->
+  <ul id="progressbar">
+    <li class="active">Select Device</li>
+    <li>Configure EchoSouder</li>
+    <li>Add Transducers</li>
+    <li>Status</li>
+  </ul>
+  <!-- fieldsets -->
+  <fieldset>
+    <h2 class="fs-title">Select a device</h2>
+    <div class="error">
+    <i class="fa fa-spinner fa-3x faa-spin animated"  data-ng-if="showLoading"></i>
+    <i class="fa fa-warning fa" data-ng-if="showLoadError">Sorry, Something went Wrong</i>
     </div>
-    <input type="button" data-ng-disabled="selectedDevice==undefined || selectedTransducers.length ==0" data-ng-click="sendDeviceConfig()" value="Send"/>
-</div>
+    <div class="content" ng-if="!showLoadError && !showLoading">
+        <span class="custom-dropdown big">
+            <select data-ng-options="deviceName for deviceName in devices.names" data-ng-model="devices.selectedDevice.name" ></select>
+        </span>
+        
+    </div>
+    <input type="button" name="next" class="next action-button" value="Next" ng-show="!showLoadError && !showLoading"/>
+  </fieldset>
+  <fieldset>
+    <h2 class="fs-title">Configure EchoSouder</h2>
+    <h3 class="fs-subtitle">Device : {{devices.selectedDevice.name}}</h3>
+    <table class="table echosounder-table">
+        <thead>
+            <tr>
+                <td>Transmit Power</td>
+                <td>Ping Interval</td>
+                <td>Mode</td>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <span class="custom-dropdown medium">
+                    <select data-ng-options="power for power in transmitPowers" data-ng-model="selectedTransmitPower" ></select> 
+                </span>
+                <span class="units">W</span>
+            </td>
+            <td>
+                <input type="number" data-ng-model="pingInterval.value" placeholder="" min="{{pingInterval.min}}" max="{{pingInterval.max}}" step="{{pingInterval.step}}"/>
+                <span class="units">ms</span>
+            </td>
+            <td>
+                <span class="custom-dropdown medium">
+                    <select data-ng-options="mode for mode in pingModes.modes" data-ng-model="pingModes.selectedMode" ></select> 
+                </span> 
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    
+    <input type="button" name="previous" class="previous action-button" value="Previous" />
+    <input type="button" name="next" id="" class="next action-button" value="Next"/>
+  </fieldset>
+    <fieldset>
+        <h2 class="fs-title">Add Transducers</h2>
+        <h3 class="fs-subtitle">Details of Transducers you wish to enable</h3>
+        <div class="transducer-form-content">
+            <div class="tooltip top form-title-tooltip" role="tooltip">
+                <div class="tooltip-arrow"></div>
+                <div class="tooltip-inner">
+                    Hardware Channel
+                </div>
+            </div>
+            <div class="transducer-detail" data-ng-repeat="t in transducers">
+                <div class="tooltip left form-error-tooltip" role="tooltip" ng-if="t.error">
+                                <div class="tooltip-arrow"></div>
+                    <div class="tooltip-inner">
+                        Enter Details
+                    </div>
+                </div>
+                <input type="checkbox" data-ng-model="t.enable" data-ng-change="validateTransducerDetail(t.id)" />
+                <input class="hardware-channel-input" type="text" data-ng-model="t.hardware_channel" placeholder="H Channel" readonly />
+                <input type="text" data-ng-model="t.name" placeholder="Name" />
+                <input type="number" data-ng-model="t.depth" placeholder="Depth" />
+                <i data-ng-class="{'fa fa-arrow-circle-up':t.view==true,'fa fa-arrow-circle-down':t.view==false}">
+                    <input type="checkbox" data-ng-model="t.view" />
+                </i>
+            </div>
+        </div>
+        <input type="button" name="previous" class="previous action-button" value="Previous" />
+        <input type="submit" name="submit" class="action-button" value="Submit" />
+        <input type="button" name="next" id="goToStatusButton" class="next" value="" ng-hide="true" />
+    </fieldset>
+  <fieldset>
+    <h2 class="fs-title">Status</h2>
+    <h3 class="fs-subtitle">Live Status of Transducers</h3>
+    <div class="error">
+        <i class="fa fa-spinner fa-3x faa-spin animated"  data-ng-if="showLoading"></i>
+        <i class="fa fa-warning fa" data-ng-if="showLoadError">Sorry, Something went Wrong</i>
+    </div>
+    <div class="content" ng-if="!showLoadError && !showLoading">
+        <div class="device-control">
+            <span class="pull-left">{{"Device : " + deviceConfigStatus.echosounder}}</span>
+            <i class="icon-button pull-right" data-ng-class="{'fa fa-play':!devices.selectedDevice.status,'fa fa-stop':devices.selectedDevice.status}" data-ng-click="changeStatus()"></i>
+        </div>
+        <table class="table status-table">
+            <tr>
+                <th>Name</th>
+                <th>H_Channel</th>
+                <th>S_Channel</th>
+                <th>Status</th>
+                <th>Rec</th>
+                <th>Window</th>
+            </tr>
+            <tr data-ng-repeat="d in deviceConfigStatus.transducers" data-ng-class="{ 'success': d.status=='enabled','danger': d.status=='disabled' , 'info':  d.status=='recording'}">
+                <td>{{d.name}}</td>
+                <td>{{d.hardware_channel}}</td>
+                <td>{{d.software_channel}}</td>
+                <td>{{d.status}}</td>
+                <td><i data-ng-class="{'fa fa-microphone':d.recording==true,'fa fa-microphone-slash':d.recording==false,'fa fa-refresh faa-spin animated':d.recording=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':d.recording=='error'}" data-ng-click="changeRecordingStatus(deviceConfigStatus.echosounder,d.name)"></i></td>
+                <td><i data-ng-class="{'fa fa-square-o':d.window==true,'fa fa-square':d.window==false,'fa fa-refresh faa-spin animated':d.window=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':d.window=='error'}" data-ng-click="changeWindowStatus(deviceConfigStatus.echosounder,d.name)"></i></td>
+            </tr>
+        </table>
+    </div>
+    <input type="button" name="previous" class="previous action-button" value="Previous" />
+    <!--<input type="submit" name="submit" class="submit action-button" value="Submit" />-->
+  </fieldset>
+</form>
+
+
+<script src="js/layout.js"></script>
