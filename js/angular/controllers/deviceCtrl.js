@@ -142,6 +142,7 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
                             function(success, result){
                                 if (success){
                                     value.recording = result.recording;
+                                    value.status = value.recording ? "recording" : "configured";
                                     console.log("recordingstatus result: ", result);                                 
                                 }
                                 else{

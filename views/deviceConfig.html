@@ -108,7 +108,7 @@
                 <th>Rec</th>
                 <th>Window</th>
             </tr>
-            <tr data-ng-repeat="d in deviceConfigStatus.transducers" data-ng-class="{ 'success': d.status=='enabled','danger': d.status=='disabled' , 'info':  d.status=='recording'}">
+            <tr data-ng-repeat="d in deviceConfigStatus.transducers" data-ng-class="{ 'success': d.status=='configured','danger': d.status=='disabled' , 'info':  d.status=='recording'}">
                 <td>{{d.name}}</td>
                 <td>{{d.hardware_channel}}</td>
                 <td>{{d.software_channel}}</td>
