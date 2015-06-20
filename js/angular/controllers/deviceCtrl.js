@@ -11,8 +11,8 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
                     { "id": 5, "enable": false, 'hardware_channel': 5, "name": "", "depth": "", "recording": false, 'window': false, "view": false, "error": false },
                     { "id": 6, "enable": false, 'hardware_channel': 6, "name": "", "depth": "", "recording": false, 'window': false, "view": false, "error": false }
                     ];
-        $scope.transmitPowers=[12.5,100,200];//units is Watts
-        $scope.selectedTransmitPower=$scope.transmitPowers[0];//initialization
+        $scope.transmitPowers=[12.5,50,200];//units is Watts
+        $scope.selectedTransmitPower=$scope.transmitPowers[1];//initialization
         $scope.pingModes={"modes":['Sync','Auto'],"selectedMode":"Sync"};
         $scope.pingInterval ={"min":100,"max":10000,"step":100,"value":100};
 
