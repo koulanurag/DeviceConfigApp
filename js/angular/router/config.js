@@ -9,11 +9,30 @@ ngDevices.config(
                 url: '/',
                 views: {
                     'default': {
+                        controller: 'devicesCtrl',
+                        templateUrl: 'views/devices.html'
+                    }
+                }
+
+            })
+            .state('add', {
+                url: '/add',
+                views: {
+                    'default': {
                         controller: 'deviceCtrl',
                         templateUrl: 'views/deviceConfig.html'
                     }
                 }
 
+            })
+            .state('status',{
+                url: '/status',
+                views: {
+                    'default': {
+                        controller: 'deviceCtrl',
+                        templateUrl: 'views/deviceConfig.html'
+                    }
+                }
             });
 
         $stateProvider

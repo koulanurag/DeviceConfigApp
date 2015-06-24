@@ -1,0 +1,198 @@
+
+<div class="add-echosounder-start-box" ng-if="selectedEchoSounderCount == 0">
+    <div class="content">
+        <h2 class="fs-title">Add Echosounder</h2>
+        <div class="add-button-circle add-5x-button-circle" data-ng-click="addEchoSounder()">
+            <i class="fa fa-plus fa-5x add-button"></i>
+        </div>
+    </div>
+</div>
+<div class="status-area" ng-if="selectedEchoSounderCount > 0">
+    <div class="status-title-area">
+
+        <table>
+            <tr ng-repeat="x in titleTableCountArray">
+                <td class="row-title-table">
+                    <table class="table table-bordered ">
+                        <tr><td>Echo Sounder</td>
+                        <tr>
+                            <td>
+                                <table  class="table table-bordered inner-table">
+                                    <tr><td>Transducer</td></tr>
+                                    <tr><td>H_Channel</td></tr>
+                                    <tr><td>S_Channel</td></tr>
+                                    <tr><td>Rec</td></tr> 
+                                    <tr><td>Window</td></tr>
+                                    <tr><td>Status</td></tr>
+                                </table>
+                            </td>
+                       </tr>
+                    </table>
+                </td> 
+            </tr>
+        </table>
+    </div>
+    <div class="status-content" ng-if="echosounders.length > 0">
+            <table class="table table-bordered echosounder-table" ng-repeat="e in echosounders | filter : showSelectedEchoSounder">
+                <tr>
+                    <td colspan={{getEnabledTransducerCount(e.transducers)}}>{{e.echosounder}}</td>
+                </tr>
+                <tr>
+                    <td ng-repeat="t in e.transducers | filter: showEnabledTransducer">
+                        <table class="table table-bordered">
+                            <tr><td>{{t.name}}</td></tr>
+                            <tr><td>{{t.hardware_channel}}</td></tr>
+                            <tr><td>{{t.software_channel}}</td></tr>
+                            <tr><td><i class="custom-line-height" data-ng-class="{'fa fa-microphone':t.recording==true,'fa fa-microphone-slash':t.recording==false,'fa fa-refresh faa-spin animated':t.recording=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.recording=='error'}" data-ng-click="changeRecordingStatus(e.echosounder,t.name)"></i></td></tr>
+                            <tr><td><i class="custom-line-height" data-ng-class="{'fa fa-square-o':t.window==true,'fa fa-square':t.window==false,'fa fa-refresh faa-spin animated':t.window=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.window=='error'}" data-ng-click="changeWindowStatus(e.echosounder,t.name)"></i></td></tr>
+                            <tr><td>{{t.status}}</td></tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        
+    </div>
+</div>
+    <span class="show-config-button" data-ng-click="configBar()">
+        <i data-ng-class="{'fa-arrow-circle-o-right':!showConfigBar,'fa-arrow-circle-o-left':showConfigBar}" class="fa fa-2x add-button"></i>
+    </span>
+<footer data-ng-if="showConfigBar">
+    <div class="configuration-bar" >
+          <div class="config-buttons">
+              <div class="add-button-circle" data-ng-click="echosounders.length!=selectedEchoSounderCount && addEchoSounder()" >
+                <i class="fa fa-plus fa-2x add-button"></i>
+              </div>
+              <div class="add-button-circle">
+                <i class="fa fa-2x fa-cog add-button"></i>
+              </div>
+          </div>
+           <div class="dropdown device-dropdown-fixed" >
+               <div class="list" ng-show="showDeviceListDropUp">
+                    <ul>
+                      <li data-ng-click="deviceListDropUp('EchoSounder1')">EchoSounder1</li>
+                      <li data-ng-click="deviceListDropUp('EchoSounder1')">EchoSounder2</li>
+                      <li data-ng-click="deviceListDropUp('EchoSounder1')">EchoSounder3</li>
+                      <li data-ng-click="deviceListDropUp('EchoSounder1')">EchoSounder4</li>
+                    </ul>
+                </div>
+                <button class="btn btn-default" type="button" ng-click="deviceListDropUp()">EchoSounders
+                    <span data-ng-class="{'dropup':!showDeviceListDropUp}">
+                        <span class="caret"></span>
+                    </span>
+                </button>
+          </div>
+    </div>
+</footer>
+
+<div class="modal fade" id="selectEchoSounder">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <button type="button" class="custom-close-button" data-ng-click="closeModel('selectEchoSounder')" >&times;</button>
+      <div class="modal-body">
+            <h2 class="fs-title">Select a device</h2>
+            <div class="error">
+            <i class="fa fa-spinner fa-3x faa-spin animated"  data-ng-if="showLoading"></i>
+            <i class="fa fa-warning fa" data-ng-if="showLoadError">Sorry, Something went Wrong</i>
+            </div>
+            <div class="content" ng-if="!showLoadError && !showLoading">
+                <span class="custom-dropdown big">
+                    <select data-ng-options="e.echosounder for e in echosounders | filter : showUnselected" data-ng-model="selectedEchoSounder.detail"></select>
+                </span>
+                
+            </div>
+            <input type="button" name="next" class="next action-button" value="Next" ng-show="!showLoadError && !showLoading" data-ng-click="gotoEchoSounderForm()"/>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="modal fade" id="configureEchoSounder">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <button type="button" class="custom-close-button" data-ng-click="closeModel('configureEchoSounder')">&times;</button>
+      <div class="modal-body">
+            <h2 class="fs-title">Configure EchoSouder</h2>
+            <h3 class="fs-subtitle">Device : {{selectedEchoSounder.detail.echosounder}}</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>Transmit Power</td>
+                        <td>Ping Interval</td>
+                        <td>Mode</td>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <span class="custom-dropdown medium">
+                            <select data-ng-options="power for power in transmitPowers" data-ng-model="selectedTransmitPower" ></select> 
+                        </span>
+                        <span class="units">W</span>
+                    </td>
+                    <td>
+                        <input type="number" class="ping-interval-input" data-ng-model="pingInterval.value" placeholder="" min="{{pingInterval.min}}" max="{{pingInterval.max}}" step="{{pingInterval.step}}"/>
+                        <span class="units">ms</span>
+                    </td>
+                    <td>
+                        <span class="custom-dropdown medium">
+                            <select data-ng-options="mode for mode in pingModes.modes" data-ng-model="pingModes.selectedMode" ></select> 
+                        </span> 
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            
+            <input type="button" name="previous" class="previous action-button" value="Previous" data-ng-click="goBackToSelectForm()" />
+            <input type="button" name="next" id="" class="next action-button" value="Next" data-ng-click="gotoAddTransducerForm()"/>
+      </div>
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="modal fade" id="addTransducerForm">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <button type="button" class="custom-close-button" data-ng-click="closeModel('addTransducerForm')" >&times;</button>
+      <div class="modal-body">
+        <div class="error">
+            <i class="fa fa-spinner fa-5x faa-spin animated"  data-ng-if="showLoading"></i>
+            <i class="fa fa-warning fa-2x" data-ng-if="showLoadError">Sorry, Something went Wrong</i>
+        </div>
+      <form data-ng-submit="sendDeviceConfig()" ng-if="!showLoadError && !showLoading">
+        <h2 class="fs-title">Add Transducers</h2>
+        <h3 class="fs-subtitle">Details of Transducers you wish to enable</h3>
+        <div class="transducer-form-content">
+            <div class="tooltip top form-title-tooltip" role="tooltip">
+                <div class="tooltip-arrow"></div>
+                <div class="tooltip-inner">
+                    Hardware Channel
+                </div>
+            </div>
+            <div ng-repeat="e in echosounders | filter:getSelectedEchoSounder">
+                <div class="transducer-detail" data-ng-repeat="t in e.transducers">
+                    <div class="tooltip left form-error-tooltip" role="tooltip" ng-if="t.error">
+                                    <div class="tooltip-arrow"></div>
+                        <div class="tooltip-inner">
+                            Enter Details
+                        </div>
+                    </div>
+                    <input type="checkbox" data-ng-model="t.enable" data-ng-change="validateTransducerDetail(t.id)" />
+                    <input class="hardware-channel-input" type="text" data-ng-model="t.hardware_channel" placeholder="H Channel" readonly />
+                    <input type="text" data-ng-model="t.name" placeholder="Name" />
+                    <input type="number" data-ng-model="t.depth" placeholder="Depth" />
+                    <i data-ng-class="{'fa fa-arrow-circle-up':t.view==true,'fa fa-arrow-circle-down':t.view==false}">
+                        <input type="checkbox" data-ng-model="t.view" />
+                    </i>
+                </div>
+            </div>
+        </div>
+        <input type="button" name="previous" data-ng-click="goBackToEchoSounderForm()" class="previous action-button" value="Previous" />
+        <input type="submit" name="submit" class="action-button" value="Submit" />
+        </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

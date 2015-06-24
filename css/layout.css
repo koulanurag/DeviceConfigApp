@@ -1,3 +1,56 @@
+table{
+    text-align:center;
+}
+.ping-interval-input{
+    margin-top: 11px;
+}
+.custom-close-button{
+    float: right;
+    margin-top: -13px;
+    font-size: 20px;
+    padding: 0px;
+    border-radius: 15px;
+    margin-right: -12px;
+    border: 1px solid;
+    width: 30px;
+    background-color: #27AE60;
+}
+
+.custom-line-height{
+    line-height: 22px !important;
+}
+.status-title-area{
+    float:left;
+}
+.status-content{
+    float:left;
+    margin-left: 136px;
+    position:absolute;
+}
+.status-area .table{
+    margin-bottom: auto !important;
+}
+.row-title-table{
+    width: 137px;;
+}
+.modal-body{
+    margin:auto;
+    text-align:center;
+}
+.add-echosounder-start-box {  
+  margin: auto;
+  text-align: center;
+  width: 500px;
+  margin-top: 15%;
+  background-color: white;
+  border: 1px solid;
+  border-radius: 7px;
+  height: 200px;
+}
+.status-area{
+    background-color: white;
+    height:100%;
+}
 #msform{
     opacity: 0;
 }
@@ -6,7 +59,7 @@
     float:right;
 }
 .device-dropdown-fixed .dropdown-menu{
-margin-top: -149px;    
+margin-top: -149px;
 }
 .device-dropdown-fixed .list{
     position: absolute;
@@ -33,18 +86,43 @@ cursor: pointer;
 }
 footer{
     bottom: 0%;
-    width: 100%;
-    position: absolute;
+    position: fixed;
+    width:100%;
     height: 51px;
     padding-top: 10px;
     padding-bottom: 10px;
     background-color: rgb(111, 105, 129);
 }
+.show-config-button{
+    border: 3px solid;
+    float: left;
+    border-color: rgb(186, 175, 218);
+    width: 34px;
+    padding-left: 2px;
+    bottom: 0%;
+    padding-bottom: 8px;
+    padding-top: 9px;
+    position: fixed;
+    z-index: 1;
+    background-color: rgb(111, 105, 129);
+}
+.configuration-bar{
+    width: 100%;
+}
+.config-buttons {
+  margin-left: 100px;
+}
 .add-button {
 color: rgb(186, 175, 218);
 }
+.add-5x-button-circle{
+    width: 76px !important;
+    border-radius: 47px !important;
+    margin-left: 40% !important;
+    margin-top: 20px !important;
+}
 .add-button-circle{
-margin-left: 50px;
+margin: 0px 8px;
 width: 40px;
 text-align: center;
 padding: 5px;
@@ -87,9 +165,10 @@ color:rgb(144, 136, 170);
     padding-bottom: 13px;
 }
 .echosounder-table{
-    width: 80%;
+    width: auto !important;
     text-align: center;
     margin: auto;
+    float: left;
 }
 .echosounder-table .custom-dropdown{
     margin:0px;
@@ -216,35 +295,10 @@ body {
 }
 /*form styles*/
 
-#msform {
-  width: 607px;
-  margin: 50px auto;
-  text-align: center;
-  position: relative;
-}
 
-#msform fieldset {
-  background: white;
-  border: 0 none;
-  border-radius: 3px;
-  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
-  padding: 20px 30px;
-  box-sizing: border-box;
-  width : 100%;
-  margin: 10 0%;
-  /*stacking fieldsets above each other*/
-  
-  position: absolute;
-}
-/*Hide all except first fieldset*/
 
-#msform fieldset:not(:first-of-type) {
-  display: none;
-}
-/*inputs*/
 
-#msform input,
-#msform textarea {
+input,textarea {
   padding: 9px;
   border: 1px solid #ccc;
   border-radius: 3px;
@@ -255,11 +309,11 @@ body {
   font-size: 13px;
 }
 /*buttons*/
-#msform input{
+input{
     max-width: 150px;
 }
 
-#msform .action-button {
+.action-button {
   width: 100px;
   background: #27AE60;
   font-weight: bold;
@@ -271,8 +325,8 @@ body {
   margin: 10px 5px;
 }
 
-#msform .action-button:hover,
-#msform .action-button:focus {
+.action-button:hover,
+.action-button:focus {
   box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
 }
 /*headings*/
@@ -289,63 +343,4 @@ body {
   font-size: 13px;
   color: #666;
   margin-bottom: 20px;
-}
-/*progressbar*/
-
-#progressbar {
-  margin-bottom: 30px;
-  overflow: hidden;
-  /*CSS counters to number the steps*/
-  
-  counter-reset: step;
-}
-
-#progressbar li {
-  list-style-type: none;
-  color: white;
-  text-transform: uppercase;
-  font-size: 9px;
-  width: 25%;
-  float: left;
-  position: relative;
-}
-
-#progressbar li:before {
-  content: counter(step);
-  counter-increment: step;
-  width: 20px;
-  line-height: 20px;
-  display: block;
-  font-size: 10px;
-  color: #333;
-  background: white;
-  border-radius: 3px;
-  margin: 0 auto 5px auto;
-}
-/*progressbar connectors*/
-
-#progressbar li:after {
-  content: '';
-  width: 100%;
-  height: 2px;
-  background: white;
-  position: absolute;
-  left: -50%;
-  top: 9px;
-  z-index: -1;
-  /*put it behind the numbers*/
-}
-
-#progressbar li:first-child:after {
-  /*connector not needed before the first step*/
-  
-  content: none;
-}
-/*marking active/completed steps green*/
-/*The number of the step and the connector before it = green*/
-
-#progressbar li.active:before,
-#progressbar li.active:after {
-  background: #27AE60;
-  color: white;
 }

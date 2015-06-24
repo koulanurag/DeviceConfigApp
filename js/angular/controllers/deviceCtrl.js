@@ -33,6 +33,9 @@ ngDevices.controller('deviceCtrl', ['$scope', '$timeout', 'deviceListFactory', '
             });
         }
 
+        $scope.showEnabledTransducer= function(transducer){
+            return transducer.enable
+        }
         $scope.selectedTransducers=[];
         
         $scope.sendDeviceConfig = function(){
