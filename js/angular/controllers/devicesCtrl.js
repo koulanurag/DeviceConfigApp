@@ -314,7 +314,7 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
             $('#addTransducerForm').modal('hide');
             $('#configureEchoSounder').modal('show');
         }
-        $scope.changeWindowStatus = function (echosounderName, transducerName) {
+        $scope.changeWindowStatus = function (echosounderName, hardwareChannel) {
             var transducer;
             console.log($scope.echosounders)
             angular.forEach($scope.echosounders, function (echosounderDetail, key) {
@@ -323,12 +323,10 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
 
                     angular.forEach(echosounderDetail.transducers, function (value, key) {
 
-                        if (value.name == transducerName) {
+                        if (value.hardware_channel == hardwareChannel) {
 
                             var previousWindowStatus = value.window;
                             value.window = "refreshing";
-
-                            console.log("device config:", $scope.devices);
 
                             sendDeviceConfigFactory.changeWindowStatus(echosounderDetail.echosounder, value.name, value.hardware_channel, value.software_channel, !previousWindowStatus,
                                 function (success, result) {
@@ -342,7 +340,7 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                                         console.log('error')
                                         value.window = "error"
                                     }
-                                    $scope.sliceForDisplay(2)
+                                    
                                     $scope.$apply();
                                 });
                             return false;
@@ -357,14 +355,14 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
 
 
         }
-        $scope.changeRecordingStatus = function (echosounderName, transducerName) {
+        $scope.changeRecordingStatus = function (echosounderName, hardwareChannel) {
             var transducer;
             debugger;
             console.log($scope.echosounders)
             angular.forEach($scope.echosounders, function (echosounderDetail, key) {
                 if (echosounderDetail.echosounder == echosounderName) {
                     angular.forEach(echosounderDetail.transducers, function (value, key) {
-                        if (value.name == transducerName) {
+                        if (value.hardware_channel == hardwareChannel) {
                             var previousRecordingStatus = value.recording
                             value.recording = "refreshing"
                             sendDeviceConfigFactory.changeRecordingStatus(echosounderDetail.echosounder, value.name, value.hardware_channel, value.software_channel, !previousRecordingStatus,
@@ -375,8 +373,7 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                                     }
                                     else {
                                         value.recording = "error"
-                                    }
-                                    $scope.sliceForDisplay(2)
+                                    }                                    
                                     $scope.$apply();
                                 })
                             return false;
