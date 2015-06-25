@@ -1,5 +1,7 @@
 ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 'sendDeviceConfigFactory',
     function ($scope, $timeout, deviceListFactory, sendDeviceConfigFactory) {
+        $scope.showLoadError = false;
+        $scope.showLoading = false;
         $scope.echosounders=[];
         $scope.showEchosoundersList=[];
         $scope.transmitPowers=[12.5,100,200];//units is Watts
@@ -19,6 +21,21 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
         $scope.showEnabledTransducer = function(transducer){
             return transducer.enable
         }
+        
+        $scope.titleTableDisplay = function(){
+            var count = Math.round($('.status-content').outerHeight()/$('.echosounder-table').outerHeight()+0.5)
+            var tempArray=[]
+            for (var i = 0; i <count-1 ; i++) {
+                tempArray.push(i);
+            }
+            $scope.titleTableCountArray=tempArray 
+            
+            //setting height of status area ; just to ensure proper background coverage
+            if  (parseInt($('.status-area').css('height'),10) < parseInt($('.status-content').outerHeight(),10)){
+               $('.status-area').css('height',$('.status-content').outerHeight()) 
+            }
+            
+        }
         $scope.getEnabledTransducerCount= function(transducers){
             var count=0;
             angular.forEach(transducers,function(value,key){
@@ -27,6 +44,17 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                 }
             });
             return count;
+        }
+        $scope.changeEchoSounderStatus = function(echoSounderName){
+            angular.forEach($scope.echosounders,function(value,key){
+                if (value.echosounder == echoSounderName){
+                    value.status = !value.status
+                    $scope.selectedEchoSounder.detail = value;
+                    $scope.$apply()
+                    return false;
+                }
+            })
+            $scope.sendDeviceConfig()
         }
         $scope.sendDeviceConfig = function(){
             var selectedEchoSounder=$scope.selectedEchoSounder.detail.echosounder
@@ -62,11 +90,14 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
 
                   //testing hardcoded data
                     var deviceConfigStatus = [{
-                        "transducers": [{ "software_channel": "11", "status": "recording", "hardware_channel": "1", "name": "H200202" },
-                        { "software_channel": "22", "status": "enabled", "hardware_channel": "2", "name": "H200333" },
-                        { "software_channel": "33", "status": "disabled", "hardware_channel": "3", "name": "H200612" }],
-                        "echosounder": "4C:00:00:01"
-                    }];
+                                                "transducers": [{ "software_channel": "11", "status": "recording", "hardware_channel": "1", "name": "H200202" },
+                                                                { "software_channel": "22", "status": "enabled", "hardware_channel": "2", "name": "H200333" },
+                                                                { "software_channel": "33", "status": "disabled", "hardware_channel": "3", "name": "H200612" },
+                                                                { "software_channel": "44", "status": "disabled", "hardware_channel": "4", "name": "H200614" },
+                                                                { "software_channel": "55", "status": "disabled", "hardware_channel": "5", "name": "H200615" },
+                                                                { "software_channel": "66", "status": "disabled", "hardware_channel": "6", "name": "H200616" }],
+                                                "echosounder": "4C:00:00:01"
+                                            }];
                     var deviceConfigStatus = deviceConfigStatus[0];
                     $scope.processStatus(deviceConfigStatus,selectedEchoSounderIndex)
                     $scope.showStatusArea=true;
@@ -76,18 +107,13 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                     $scope.selectedEchoSounderCount +=1
                     $scope.showConfigBar = false;
                     $timeout(function(){
-                        var count = Math.round($('.status-content').outerHeight()/$('.echosounder-table').outerHeight()+0.5)
-                        var tempArray=[]
-                        for (var i = 0; i <count-1 ; i++) {
-                            tempArray.push(i);
-                        }
-                        $scope.titleTableCountArray=tempArray
+                            $scope.titleTableDisplay()
                     })
                     // hardcoding ends
 
-/*                  //code to be used in real time
+ /*                 //code to be used in real time
                     
-                    $scope.showLoading = true;
+                   $scope.showLoading = true;
                     sendDeviceConfigFactory.sendData(selectedEchoSounder,$scope.echosounders[selectedEchoSounderIndex].status,$scope.selectedTransmitPower,$scope.pingModes.selectedMode,$scope.pingInterval,selectedTransducers, function (success) {
                         if (success) {
                             
@@ -98,7 +124,9 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                             $('#addTransducerForm').modal('hide');
                             $scope.selectedEchoSounderCount +=1
                             $scope.showConfigBar = false;
-                           // console.log("sendData result: ", deviceConfigStatus);                            
+                            $timeout(function(){
+                                    $scope.titleTableDisplay()
+                            })                            
 
                         } else {
                             $scope.showLoading = false;
@@ -107,8 +135,11 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
 
                         }
                         $scope.$apply();//this should be here so, that even error cases get applied
-                    });*/
+                    });
+                    
+                    //code end -- for real time
 
+*/
                 }
                 else {
                     $scope.echosounders[selectedEchoSounderIndex].transducers[0].error = true;
@@ -132,7 +163,7 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
             });
             $scope.echosounders[selectedEchoSounderIndex].selected=true;
            // console.log("process",$scope.echosounders[selectedEchoSounderIndex])
-            $scope.sliceForDisplay(2) 
+            //$scope.sliceForDisplay(2) 
         }
         $scope.createEchosoundersList = function(deviceList){
             
@@ -154,21 +185,9 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                             });
                         });
                     });
-                $scope.sliceForDisplay(2) //give per slice count ; will be used in displaying echosounders in all status page   
+               
                 
         };
-        $scope.sliceForDisplay = function(perSliceCount){
-            $scope.showEchosoundersList=[]
-            var tempList=[]
-            angular.forEach($scope.echosounders,function(value,key){
-                if(value.selected==true){
-                    tempList.push(value)
-                }
-            });
-            for( i = 0;i < tempList.length; i = i + perSliceCount ){
-                $scope.showEchosoundersList.push(tempList.slice(i,i+2));
-            }   
-        }
         $scope.showSelectedEchoSounder = function(echosounder){
             return echosounder.selected
         }
@@ -176,11 +195,11 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
         $scope.configBar = function(){
             $scope.showConfigBar=!$scope.showConfigBar
         }
-        //console.log( $scope.showEchosoundersList)
+        
         $scope.showDeviceListDropUp = false;
         $scope.deviceListDropUp = function(echoSounderName){
-            if (echoSounderName  === undefined){
-                
+            if (echoSounderName  !== undefined){
+                //TODO : required while editing exiting echosounder configuration
             }
             $scope.showDeviceListDropUp =  !$scope.showDeviceListDropUp
         }
@@ -196,19 +215,47 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
         }
         $scope.addEchoSounder = function(){
             console.log('add Echosounder')
-            /*if not already retrived ;make call to factory to get list of echosouder
-              once you have the list go to modal
-            */
-            console.log($scope.selectEchoSounder);
+          //if not already retrived ;make call to factory to get list of echosouder
+          //  once you have the list go to modal
+            
+/*            //real time code
+            
+            if ($scope.echosounders.length==0){
+                $scope.showLoadError = false;
+                $scope.showLoading = true;  //shows loading symbol
+                deviceListFactory.loadData(function (success) {
+
+                    if (success) {
+    
+                        $scope.showLoading = false;
+                        $scope.deviceList = deviceListFactory.getData();
+                        var deviceList =deviceListFactory.getData();
+                        $scope.createEchosoundersList(deviceList)
+                    } else {
+    
+                        $scope.showLoading = false;
+                        $scope.showLoadError = true;
+                        console.log("There was an error while retrieving device list");
+    
+                    }
+                    $scope.$apply();    //this should be here so, that even error cases get applied
+
+                });
+
+                
+            }  
+            //end of real time code  
+*/
+              
+
             //hardcoding starts
             if ($scope.echosounders.length==0){
-                var deviceList ={"CageEye mk.III":["4C:00:00:01", "4C:00:00:02","4C:00:00:03","4C:00:00:04" ]};
+                var deviceList ={"CageEye mk.III":["4C:00:00:01", "4C:00:00:02","4C:00:00:03","4C:00:00:04","4C:00:00:05","4C:00:00:06" ]};
                 $scope.createEchosoundersList(deviceList)
                 
             }
-
-
             //hardcoding ends
+
             var flag=false;
             angular.forEach($scope.echosounders,function (value,key) {
                 console.log(value,key)

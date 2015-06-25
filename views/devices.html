@@ -35,8 +35,12 @@
     <div class="status-content" ng-if="echosounders.length > 0">
             <table class="table table-bordered echosounder-table" ng-repeat="e in echosounders | filter : showSelectedEchoSounder">
                 <tr>
-                    <td colspan={{getEnabledTransducerCount(e.transducers)}}>{{e.echosounder}}</td>
+                    <td colspan={{getEnabledTransducerCount(e.transducers)}}>
+                        {{e.echosounder}}
+                        <i class="icon-button pull-right" data-ng-class="{'fa fa-play':!e.status,'fa fa-stop':e.status}" data-ng-click="changeEchoSounderStatus(e.echosounder)"></i>
+                    </td>
                 </tr>
+
                 <tr>
                     <td ng-repeat="t in e.transducers | filter: showEnabledTransducer">
                         <table class="table table-bordered">
