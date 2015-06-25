@@ -31,8 +31,15 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
             if (deviceStatus !== '') {
                 params[this.defaults.deviceStatus] = deviceStatus;
             }
-            if(transmitPower !==''){
-                params[this.defaults.transmitPower] = transmitPower;
+            if (transmitPower !== '') {
+
+                if (transmitPower == "12.5") {
+                    params[this.defaults.transmitPower] = 5;
+                } else if (transmitPower == "50") {
+                    params[this.defaults.transmitPower] = 10;
+                } else {
+                    params[this.defaults.transmitPower] = 20;
+                }                
             }
             if(pingMode !==''){
                 params[this.defaults.pingMode] = pingMode;
