@@ -1,0 +1,140 @@
+1. Load current configuration for all echosounders from backend on startup, go directly to status menu
+Requirement: 
+Please, attach sample configuration for all echosounders. Which I will receive on startup.
+See startup_json.txt
+2. Larger buttons for changing window and record status.
+3. Button Add /Edit:
+Requirement:
+After a user clicks the button:A request will be send to backend to retrieve latest list of echosounders.
+Please, attach sample response
+See echosounder_list_json_format.txt
+
+4. A dropdown with echosounder type (cageeye or merdøye) is needed. If cageeye is selected, there should be a dropdown with device id. (as is done in current implementation)
+Queries:
+	Is there going to be transducer form for merdoye.?
+	Yes. But it will not include a setting for ping interval or mode. 
+	The transmit power will be 	20W, 40W and 70W.
+5. When selecting a device, get current configuration for this specific echosounder from back-end, and display it. Submit will reconfigure and send update to status page.
+6. Depth in configuration is no longer needed, it should be removed
+7. Fix possible bug with up/down configuration button. It always sends false? Increase button size, and add a text description.
+8. Larger button to enable a transducer.
+9. When selecting a device, get current configuration for this specific echosounder from back-end, and display it. Submit will reconfigure and send update to status page.
+Format will be like startup_json.txt but will only include a single echosounder
+
+
+
+from json rpc "result":
+
+{
+  "CageEye mk.III":{
+				  "4111-0004": {
+						"deviceStatus": true,
+						"transmitPower": 50,
+						"pingMode": "Auto",
+						"pingInterval": 100,
+						"transducers": [
+						  {
+							"name": "tet",
+							"hardware_channel": 1,
+							"software_channel": 1,
+							"recording": false,
+							"window": false
+						  },
+						  {
+							"name": "tete",
+							"hardware_channel": 2,
+							"software_channel": 2,
+							"recording": false,
+							"window": false
+						  },
+						  {
+							"name": "tet",
+							"hardware_channel": 3,
+							"software_channel": 3,
+							"recording": false,
+							"window": false
+						  },
+						  {
+							"name": "tete",
+							"hardware_channel": 4,
+							"software_channel": 4,
+							"recording": false,
+							"window": false
+						  },
+						  {
+							"name": "tete",
+							"hardware_channel": 5,
+							"software_channel": 5,
+							"recording": false,
+							"window": false
+						  },
+						  {
+							"name": "tete",
+							"hardware_channel": 6,
+							"software_channel": 6,
+							"recording": false,
+							"window": false
+						  }
+						]
+				  }
+	},
+  "Merdøye mk.II": {
+    "deviceStatus": true,
+    "transmitPower": 20,
+    "transducers": [
+      {
+        "name": "tet",
+        "hardware_channel": 1,
+        "software_channel": 1,
+        "recording": false,
+        "window": false
+      },
+      {
+        "name": "tete",
+        "hardware_channel": 2,
+        "software_channel": 2,
+        "recording": false,
+        "window": false
+      },
+      {
+        "name": "tet",
+        "hardware_channel": 3,
+        "software_channel": 3,
+        "recording": false,
+        "window": false
+      },
+      {
+        "name": "tete",
+        "hardware_channel": 4,
+        "software_channel": 4,
+        "recording": false,
+        "window": false
+      },
+      {
+        "name": "tete",
+        "hardware_channel": 5,
+        "software_channel": 5,
+        "recording": false,
+        "window": false
+      },
+      {
+        "name": "tete",
+        "hardware_channel": 6,
+        "software_channel": 6,
+        "recording": false,
+        "window": false
+      }
+    ]
+  }
+}
+
+
+"{"jsonrpc":"2.0","result":"{\r\n  \"CageEye mk.III\": [\r\n    \"4100-0000\",\r\n    \"4111-0000\",\r\n    \"4111-0001\"\r\n  ],\r\n  \"Merdøye mk.II\": \"RS232 prototype\",\r\n  \"EK15\": \"not available (contact us)\"\r\n}","id":"2"}"
+
+
+
+//requirements
+get-echosounder_configuration
+ jsonrpc_method.id = ?
+ 
+ 

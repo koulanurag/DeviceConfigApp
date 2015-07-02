@@ -10,6 +10,7 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
         $scope.pingInterval = { "min": 100, "max": 10000, "step": 100, "value": 100 };
         $scope.selectedEchoSounder = { 'detail': {} } //to be used in add echosounder form
         $scope.selectedEchoSounderCount = 0;
+        $scope.showEchoSounderBox = true;
         $scope.showStatusArea = true;
         $scope.titleTableCountArray = [1];
         $scope.echoSounderIntilization = function () {
@@ -199,7 +200,8 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
 
         };
         $scope.showSelectedEchoSounder = function (echosounder) {
-            return echosounder.selected
+            //return echosounder.selected
+            return true;
         }
         $scope.showConfigBar = false
         $scope.configBar = function () {
@@ -314,42 +316,34 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
             $('#addTransducerForm').modal('hide');
             $('#configureEchoSounder').modal('show');
         }
-        $scope.changeWindowStatus = function (echosounderName, hardwareChannel) {
+        $scope.changeWindowStatus = function (echosounderName,hardwareChannel,deviceName) {
             var transducer;
-            console.log($scope.echosounders)
-            angular.forEach($scope.echosounders, function (echosounderDetail, key) {
+            angular.forEach($scope.echosounders[echosounderName][deviceName].transducers , function (value, key) {
 
-                if (echosounderDetail.echosounder == echosounderName) {
+                if (value.hardware_channel == hardwareChannel) {
 
-                    angular.forEach(echosounderDetail.transducers, function (value, key) {
+                    var previousWindowStatus = value.window;
+                    value.window = "refreshing";
 
-                        if (value.hardware_channel == hardwareChannel) {
-
-                            var previousWindowStatus = value.window;
-                            value.window = "refreshing";
-
-                            sendDeviceConfigFactory.changeWindowStatus(echosounderDetail.echosounder, value.name, value.hardware_channel, value.software_channel, !previousWindowStatus,
-                                function (success, result) {
-                                    if (success) {
-                                        console.log('success')
-                                        //{echosounder: "4111-0000", transducerName: "etet", window: true}
-                                        value.window = result.window;
-                                        console.log("windowstatus result: ", result);
-                                    }
-                                    else {
-                                        console.log('error')
-                                        value.window = "error"
-                                    }
-                                    
-                                    $scope.$apply();
-                                });
-                            return false;
-
-                        }
-
-                    });
+                    sendDeviceConfigFactory.changeWindowStatus(echosounderName, value.name, value.hardware_channel, value.software_channel, !previousWindowStatus,
+                        function (success, result) {
+                            if (success) {
+                                console.log('success')
+                                //{echosounder: "4111-0000", transducerName: "etet", window: true}
+                                value.window = result.window;
+                                console.log("windowstatus result: ", result);
+                            }
+                            else {
+                                console.log('error')
+                                value.window = "error"
+                            }
+                            
+                            $scope.$apply();
+                        });
+                    return false;
 
                 }
+
 
             });
 
@@ -390,16 +384,32 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
         }
         $timeout(function () {
             console.log('timeout');
-            $scope.echosounders = [];
-            /*            $('#selectEchoSounder').modal({
-                            keyboard: false
-                        })
-                        $('#configureEchoSounder').modal({
-                            keyboard: false
-                        })
-                        $('#addTransducerForm').modal({
-                            keyboard: false
-                        })*/
+            //hardcode data starts
+            $scope.echosounders={"CageEye mk.III":{"4111-0004":{"deviceStatus":true,"transmitPower":50,"pingMode":"Auto","pingInterval":100,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false}]}},"Merdøye mk.II":{"deviceStatus":true,"transmitPower":20,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false}]}}
+            //$scope.echosounders={"CageEye mk.III":{},"Merdøye mk.II": {}}
+            angular.forEach($scope.echosounders,function(value,key){
+                console.log(value)
+              //  debugger;
+               if( Object.keys(value).length != 0 ){
+                  // console.log('inside show')
+                   $scope.showEchoSounderBox = false;
+               }
+            });
+            
+            //hardcoded data ends
+/*
+            //code to be used in real time
+            deviceListFactory.loadEchosounderConfiguration(function(success){
+                if(success){
+                    $scope.echosounders=deviceListFactory.getEchosounderConfiguration()
+                }
+                else{
+                    $scope.echosounders = {};
+                    $scope.showEchoSounderBox= true;
+                }
+            });
+            //real time code end
+*/            
         })
 
 

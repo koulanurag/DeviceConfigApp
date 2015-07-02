@@ -1,5 +1,5 @@
 
-<div class="add-echosounder-start-box" ng-if="selectedEchoSounderCount == 0">
+<div class="add-echosounder-start-box" ng-if="showEchoSounderBox">
     <div class="content">
         <h2 class="fs-title">Add Echosounder</h2>
         <div class="add-button-circle add-5x-button-circle" data-ng-click="addEchoSounder()">
@@ -7,9 +7,8 @@
         </div>
     </div>
 </div>
-<div class="status-area" ng-if="selectedEchoSounderCount > 0">
+<div class="status-area" ng-if="!showEchoSounderBox">
     <div class="status-title-area">
-
         <table>
             <tr ng-repeat="x in titleTableCountArray">
                 <td class="row-title-table">
@@ -23,7 +22,6 @@
                                     <tr><td>S_Channel</td></tr>
                                     <tr><td>Rec</td></tr>
                                     <tr><td>Window</td></tr>
-                                    <tr><td>Status</td></tr>
                                 </table>
                             </td>
                         </tr>
@@ -32,29 +30,54 @@
             </tr>
         </table>
     </div>
-    <div class="status-content" ng-if="echosounders.length > 0">
-        <table class="table table-bordered echosounder-table" ng-repeat="e in echosounders | filter : showSelectedEchoSounder">
-            <tr>
-                <td colspan={{getEnabledTransducerCount(e.transducers)}}>
-                    {{e.echosounder}}
-                    <i class="icon-button pull-right" data-ng-class="{'fa fa-play':!e.status,'fa fa-stop':e.status}" data-ng-click="changeEchoSounderStatus(e.echosounder)"></i>
-                </td>
-            </tr>
-
-            <tr>
-                <td ng-repeat="t in e.transducers | filter: showEnabledTransducer">
-                    <table class="table table-bordered">
-                        <tr><td>{{t.name}}</td></tr>
-                        <tr><td>{{t.hardware_channel}}</td></tr>
-                        <tr><td>{{t.software_channel}}</td></tr>
-                        <tr><td><i class="custom-line-height" data-ng-class="{'fa fa-microphone':t.recording==true,'fa fa-microphone-slash':t.recording==false,'fa fa-refresh faa-spin animated':t.recording=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.recording=='error'}" data-ng-click="changeRecordingStatus(e.echosounder,t.name)"></i></td></tr>
-                        <tr><td><i class="custom-line-height" data-ng-class="{'fa fa-square-o':t.window==true,'fa fa-square':t.window==false,'fa fa-refresh faa-spin animated':t.window=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.window=='error'}" data-ng-click="changeWindowStatus(e.echosounder,t.name)"></i></td></tr>
-                        <tr><td>{{t.status}}</td></tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-
+    <div class="status-content" ng-if="echosounders.length > 0 || true">
+        
+        <div ng-repeat="(es,esDetail) in echosounders" class="pull-left">
+            <!--{{es}}-->
+            <div ng-if="esDetail.transducers == undefined" class="pull-left">
+                <table class="table table-bordered echosounder-table" ng-repeat="(d,dDetail) in esDetail">
+                    <tr>
+    <!--                    <td colspan={{getEnabledTransducerCount(dDetail.transducers)}}>-->
+                        <td colspan={{dDetail.transducers.length}}>
+                            {{ es + ":" + d}}
+                            <i class="icon-button pull-right" data-ng-class="{'fa fa-play':!dDetail.deviceStatus,'fa fa-stop':dDetail.deviceStatus}" data-ng-click="changeEchoSounderStatus(es,d)"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td ng-repeat="t in dDetail.transducers"><!-- | filter: showEnabledTransducer">-->
+                            <table class="table table-bordered">
+                                <tr><td>{{t.name}}</td></tr>
+                                <tr><td>{{t.hardware_channel}}</td></tr>
+                                <tr><td>{{t.software_channel}}</td></tr>
+                                <tr><td><i class="custom-line-height" data-ng-class="{'fa fa-microphone':t.recording==true,'fa fa-microphone-slash':t.recording==false,'fa fa-refresh faa-spin animated':t.recording=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.recording=='error'}" data-ng-click="changeRecordingStatus(es,t.hardware_channel,d)"></i></td></tr>
+                                <tr><td><i class="custom-line-height" data-ng-class="{'fa fa-square-o':t.window==true,'fa fa-square':t.window==false,'fa fa-refresh faa-spin animated':t.window=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.window=='error'}" data-ng-click="changeWindowStatus(es,t.hardware_channel,d)"></i></td></tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div ng-if="esDetail.transducers !== undefined" class="pull-left">
+                <table class="table table-bordered echosounder-table">
+                    <tr>
+    <!--                    <td colspan={{getEnabledTransducerCount(dDetail.transducers)}}>-->
+                        <td colspan={{esDetail.transducers.length}}>
+                            {{ es}}
+                            <i class="icon-button pull-right" data-ng-class="{'fa fa-play':!esDetail.deviceStatus,'fa fa-stop':esDetail.deviceStatus}" data-ng-click="changeEchoSounderStatus(es)"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td ng-repeat="t in esDetail.transducers"><!-- | filter: showEnabledTransducer">-->
+                            <table class="table table-bordered">
+                                <tr><td>{{t.name}}</td></tr>
+                                <tr><td>{{t.hardware_channel}}</td></tr>
+                                <tr><td>{{t.software_channel}}</td></tr>
+                                <tr><td><i class="custom-line-height" data-ng-class="{'fa fa-microphone':t.recording==true,'fa fa-microphone-slash':t.recording==false,'fa fa-refresh faa-spin animated':t.recording=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.recording=='error'}" data-ng-click="changeRecordingStatus(es,t.hardware_channel)"></i></td></tr>
+                                <tr><td><i class="custom-line-height" data-ng-class="{'fa fa-square-o':t.window==true,'fa fa-square':t.window==false,'fa fa-refresh faa-spin animated':t.window=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.window=='error'}" data-ng-click="changeWindowStatus(es,t.hardware_channel)"></i></td></tr>                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 <span class="show-config-button" data-ng-click="configBar()">
