@@ -40,10 +40,10 @@
     <!--                    <td colspan={{getEnabledTransducerCount(dDetail.transducers)}}>-->
                         <td colspan={{dDetail.transducers.length}}>
                             {{ es + ":" + d}}
-                            <i class="icon-button pull-right" data-ng-class="{'fa fa-play':!dDetail.deviceStatus,'fa fa-stop':dDetail.deviceStatus}" data-ng-click="changeEchoSounderStatus(es,d)"></i>
+                            <i class="icon-button pull-right" data-ng-class="{'fa fa-play':dDetail.deviceStatus==false,'fa fa-stop':dDetail.deviceStatus==true,'fa fa-refresh faa-spin animated': dDetail.deviceStatus=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger': dDetail.deviceStatus=='error'}" data-ng-click="changeEchoSounderStatus(es,d)"></i>
                         </td>
                     </tr>
-                    <tr>
+                    <tr ng-class="{'transparent':dDetail.deviceStatus!=true}">
                         <td ng-repeat="t in dDetail.transducers"><!-- | filter: showEnabledTransducer">-->
                             <table class="table table-bordered">
                                 <tr><td>{{t.name}}</td></tr>
@@ -62,10 +62,10 @@
     <!--                    <td colspan={{getEnabledTransducerCount(dDetail.transducers)}}>-->
                         <td colspan={{esDetail.transducers.length}}>
                             {{ es}}
-                            <i class="icon-button pull-right" data-ng-class="{'fa fa-play':!esDetail.deviceStatus,'fa fa-stop':esDetail.deviceStatus}" data-ng-click="changeEchoSounderStatus(es)"></i>
+                            <i class="icon-button pull-right" data-ng-class="{'fa fa-play':dDetail.deviceStatus==false,'fa fa-stop':esDetail.deviceStatus==true,'fa fa-refresh faa-spin animated' : esDetail.deviceStatus=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger' : esDetail.deviceStatus=='error'}" data-ng-click="changeEchoSounderStatus(es)"></i>
                         </td>
                     </tr>
-                    <tr>
+                    <tr ng-class="{'transparent':esDetail.deviceStatus!=true}">
                         <td ng-repeat="t in esDetail.transducers"><!-- | filter: showEnabledTransducer">-->
                             <table class="table table-bordered">
                                 <tr><td>{{t.name}}</td></tr>

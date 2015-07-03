@@ -106,7 +106,71 @@ ngDevices.factory('deviceListFactory', [ '$http',
 
             };
 
-        };       
+        };
+        
+        DeviceList.prototype.changeStatus = function(echosounder,echosounderName,deviceName,newStatus,callback_function){
+
+            var params = {};
+            
+            if(echosounder !== undefined){
+                params['echosounder']=echosounder
+            }
+            if(echosounderName !== undefined){
+                params['echosounderName']=echosounderName
+            }
+            if(deviceName !== undefined){
+                params['deviceName'] = deviceName
+            }
+            if(newStatus !== undefined){
+                params['newStatus']=newStatus
+            }
+            
+            var ws = new_websocket(); 
+
+            var jsonrpc_method = {};
+            jsonrpc_method.jsonrpc = "2.0";
+            jsonrpc_method.method = "set_status";
+            jsonrpc_method.params = params;            
+            jsonrpc_method.id = "2";//change it as required
+
+            ws.onerror = function (event) {
+                console.log("websocket: error");
+                callback_function(false);
+            };
+
+            ws.onmessage = function (event) {
+
+                console.log("websocket: onmessage", event);
+
+                try {
+                    
+                    var response = JSON.parse(event.data);
+                    if (response.id == jsonrpc_method.id) {
+                        try {
+                            var echosounder = JSON.parse(response.result);
+                            callback_function(true,echosounder);
+                        }catch (e) {
+                            console.log("JSON.parse error", response, e);
+                            callback_function(false);    
+                        }
+                    }
+
+                } catch (e) {
+                    console.log("JSON.parse error", event, e);
+                }
+                
+            };
+
+            ws.onopen = function () {
+                
+                setTimeout(function () {                    
+                    console.log("websocket: send", jsonrpc_method);
+                    ws.send(JSON.stringify(jsonrpc_method));
+                }, 1000);
+
+            };
+           
+        }
 
         DeviceList.prototype.loadEchoConfigSuccess = function (response) {
                         

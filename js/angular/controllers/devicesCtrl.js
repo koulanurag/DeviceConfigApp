@@ -46,16 +46,47 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
             });
             return count;
         }
-        $scope.changeEchoSounderStatus = function (echoSounderName) {
-            angular.forEach($scope.echosounders, function (value, key) {
+        $scope.changeEchoSounderStatus = function (echosounderName,deviceName) {
+            var newStatus;
+            if (deviceName==undefined){
+                newStatus=! $scope.echosounders[echosounderName].deviceStatus
+                $scope.echosounders[echosounderName].deviceStatus="refreshing"
+            }
+            else{
+                newStatus=! $scope.echosounders[echosounderName][deviceName].deviceStatus
+                $scope.echosounders[echosounderName][deviceName].deviceStatus="refreshing"
+            }
+            console.log("changeEchoSounderStatus");
+            deviceListFactory.changeStatus($scope.echosounders[echosounderName],echosounderName,deviceName,newStatus,function(echosounder,success){
+                 if (success){
+                     if (deviceName==undefined){
+                        $scope.echosounders[echosounderName] = echosounder[echosounderName]
+                        $scope.$apply();
+                     }
+                     else{
+                        $scope.echosounders[echosounderName][deviceName] = echosounder[echosounderName][deviceName]  
+                     }
+                 }else{
+                     if (deviceName==undefined){
+                        $scope.echosounders[echosounderName].deviceStatus = "error";
+                     }
+                     else{
+                        $scope.echosounders[echosounderName][deviceName].deviceStatus = "error";  
+                     }
+                     
+                 }  
+            })
+        //i think i should just send echosounder and deviceName for status change instead of sending entire configration back
+
+/*            angular.forEach($scope.echosounders, function (value, key) {
                 if (value.echosounder == echoSounderName) {
                     value.status = !value.status
                     $scope.selectedEchoSounder.detail = value;
                     $scope.$apply()
                     return false;
                 }
-            })
-            $scope.sendDeviceConfig()
+            })*/
+//            $scope.sendDeviceConfig()
         }
         $scope.sendDeviceConfig = function () {
             var selectedEchoSounder = $scope.selectedEchoSounder.detail.echosounder
@@ -317,69 +348,77 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
             $('#configureEchoSounder').modal('show');
         }
         $scope.changeWindowStatus = function (echosounderName,hardwareChannel,deviceName) {
-            var transducer;
-            angular.forEach($scope.echosounders[echosounderName][deviceName].transducers , function (value, key) {
-
-                if (value.hardware_channel == hardwareChannel) {
-
-                    var previousWindowStatus = value.window;
-                    value.window = "refreshing";
-
-                    sendDeviceConfigFactory.changeWindowStatus(echosounderName, value.name, value.hardware_channel, value.software_channel, !previousWindowStatus,
-                        function (success, result) {
-                            if (success) {
-                                console.log('success')
-                                //{echosounder: "4111-0000", transducerName: "etet", window: true}
-                                value.window = result.window;
-                                console.log("windowstatus result: ", result);
-                            }
-                            else {
-                                console.log('error')
-                                value.window = "error"
-                            }
-                            
-                            $scope.$apply();
-                        });
-                    return false;
-
-                }
-
-
-            });
-
+            
+            if ($scope.echosounders[echosounderName][deviceName] !== undefined ){
+                checkWindow($scope.echosounders[echosounderName][deviceName].transducers);
+            }
+            else{ 
+                checkWindow($scope.echosounders[echosounderName].transducers);
+            }
+            function checkWindow(transducers){
+                angular.forEach(transducers , function (value, key) {
+    
+                    if (value.hardware_channel == hardwareChannel) {
+    
+                        var previousWindowStatus = value.window;
+                        value.window = "refreshing";
+    
+                        sendDeviceConfigFactory.changeWindowStatus(echosounderName, value.name, value.hardware_channel, value.software_channel, !previousWindowStatus,
+                            function (success, result) {
+                                if (success) {
+                                    console.log('success')
+                                    value.window = result.window;
+                                    console.log("windowstatus result: ", result);
+                                }
+                                else {
+                                    console.log('error')
+                                    value.window = "error"
+                                }
+                                
+                                $scope.$apply();
+                            });
+                        return false;
+    
+                    }
+    
+    
+                });                
+                    
+            }
 
         }
-        $scope.changeRecordingStatus = function (echosounderName, hardwareChannel) {
-            var transducer;
-            debugger;
-            console.log($scope.echosounders)
-            angular.forEach($scope.echosounders, function (echosounderDetail, key) {
-                if (echosounderDetail.echosounder == echosounderName) {
-                    angular.forEach(echosounderDetail.transducers, function (value, key) {
-                        if (value.hardware_channel == hardwareChannel) {
-                            var previousRecordingStatus = value.recording
-                            value.recording = "refreshing"
-                            sendDeviceConfigFactory.changeRecordingStatus(echosounderDetail.echosounder, value.name, value.hardware_channel, value.software_channel, !previousRecordingStatus,
-                                function (success, result) {
-                                    if (success) {
-                                        value.recording = result.recording;
-                                        console.log("recordingstatus result: ", result);
-                                    }
-                                    else {
-                                        value.recording = "error"
-                                    }                                    
-                                    $scope.$apply();
-                                })
-                            return false;
-                        }
-                    });
-                }
-            })
+        $scope.changeRecordingStatus = function (echosounderName, hardwareChannel,deviceName) {
+            //debugger;
+            if ($scope.echosounders[echosounderName][deviceName] !== undefined){
+                checkRecording($scope.echosounders[echosounderName][deviceName].transducers);
+            }
+            else{ 
+                checkRecording($scope.echosounders[echosounderName].transducers);
+            }
+            function checkRecording(transducers){
+                angular.forEach(transducers, function (value, key) {
+                    if (value.hardware_channel == hardwareChannel) {
+    
+                        var previousRecordingStatus = value.recording;
+                        value.recording = "refreshing";
+    
+                        sendDeviceConfigFactory.changeRecordingStatus(echosounderName, value.name, value.hardware_channel, value.software_channel, !previousRecordingStatus,
+                                    function (success, result) {
+                                        if (success) {
+                                            value.recording = result.recording;
+                                            console.log("recordingstatus result: ", result);
+                                        }
+                                        else {
+                                            value.recording = "error"
+                                        }                                    
+                                        $scope.$apply();
+                                    })
+                        return false;
+    
+                    }
+                });
+            }
 
-
-            angular.forEach($scope.deviceConfigStatus.transducers, function (value, key) {
-
-            });
 
         }
         $timeout(function () {

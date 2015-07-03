@@ -133,8 +133,35 @@ from json rpc "result":
 
 
 
-//requirements
-get-echosounder_configuration
- jsonrpc_method.id = ?
+// requiremnts ------------------------------------
+
+1.
+        get-echosounder_configuration
+             jsonrpc_method.id = ?
+ 
+ 2. working of play/stop button
+ 
+ on click on play stop button :
+ a json rpc request wuill be sent 
+ 
+ method : set_status
+ method.id =?
+ 
+ params={
+    "echosounderName":"CageEye mk.III";
+    "echosounder": {"4111-0004":{"deviceStatus":true,"transmitPower":50,"pingMode":"Auto","pingInterval":100,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false}]}	};
+                    //info of selected echosounder
+    "deviceName":"4111-0004";// will not be present for "Merdøye mk.I"
+    "newStatus": false // new status to be set
+ }
+ 
+ and following response is expected
+ 
+ {"4111-0004":{"deviceStatus":false,"transmitPower":50,"pingMode":"Auto","pingInterval":100,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false}]}	
+ 
+ 
+ 
+ 
+
  
  
