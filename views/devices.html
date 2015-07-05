@@ -86,7 +86,7 @@
 <footer data-ng-if="showConfigBar">
     <div class="configuration-bar">
         <div class="config-buttons">
-            <div class="add-button-circle" data-ng-click="echosounders.length!=selectedEchoSounderCount && addEchoSounder()">
+            <div class="add-button-circle" data-ng-click="addEchoSounder()">
                 <i class="fa fa-plus fa-2x add-button"></i>
             </div>
             <div class="add-button-circle">
@@ -117,18 +117,25 @@
         <div class="modal-content">
             <button type="button" class="custom-close-button" data-ng-click="closeModel('selectEchoSounder')">&times;</button>
             <div class="modal-body">
-                <h2 class="fs-title">Configure EchoSouder</h2>                
-                <h2 class="fs-title">Select a device</h2>
+                <h2 class="fs-title">Configure EchoSouder</h2>
                 <div class="error">
                     <i class="fa fa-spinner fa-3x faa-spin animated" data-ng-if="showLoading"></i>
                     <i class="fa fa-warning fa" data-ng-if="showLoadError">Sorry, Something went Wrong</i>
                 </div>
                 <div class="content" ng-if="!showLoadError && !showLoading">
-                    <span class="custom-dropdown big">
-                        <select data-ng-options="e.echosounder for e in echosounders | filter : showUnselected" data-ng-model="selectedEchoSounder.detail"></select>
-                    </span>
-
-                    <h3 class="fs-subtitle">Device : {{selectedEchoSounder.detail.echosounder}}</h3>
+                    <div id="echosounderTypes">
+                        <h2 class="fs-title">Type :</h2>
+                        <span class="custom-dropdown big">
+                            <select data-ng-options="k for (k,v) in echosoudersInfo" data-ng-model="selectedEchoSounder.detail" data-ng-change="getConfiguration(selectedEchoSounder.detail)"></select><!--selectedEchoSounder.detail-->
+                        </span>
+                    </div>
+                    <div id="DeviceList" ng-if="selectedEchoSounder.detail == echosoudersInfo['CageEye mk.III']">
+                        <h2 class="fs-title">Device :</h2>
+                        <span class="custom-dropdown big">
+                            <select data-ng-options="v for (k,v) in selectedEchoSounder.detail" data-ng-model="selectedDevice" data-ng-change="getConfiguration(selectedEchoSounder.detail,selectedDevice)"></select><!--selectedEchoSounder.detail-->
+    <!--                        <select data-ng-options="e in selectedEchoSounder.detail" data-ng-model="abc" ></select>-->
+                        </span>
+                    </div>
                     <table class="table">
                         <thead>
                             <tr>

@@ -4,7 +4,7 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
         $scope.showLoading = false;
         $scope.echosounders = [];
         $scope.showEchosoundersList = [];
-        $scope.transmitPowers = [5, 10, 20];//units is Watts
+        $scope.transmitPowers = [5, 10, 20, 40, 70];//units is Watts
         $scope.selectedTransmitPower = $scope.transmitPowers[0];//initialization
         $scope.pingModes = { "modes": ['Sync', 'Auto'], "selectedMode": "Sync" };
         $scope.pingInterval = { "min": 100, "max": 10000, "step": 100, "value": 100 };
@@ -18,11 +18,30 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
             $scope.pingModes.selectedMode = $scope.pingModes.modes[0];
             $scope.pingInterval.value = $scope.pingInterval.min;
         }
-
+        $scope.echosoudersInfo={}
         $scope.showEnabledTransducer = function (transducer) {
             return transducer.enable
         }
-
+        $scope.getConfiguration = function(echosounderName,deviceName){
+            var configuration;
+            if(deviceName != undefined){
+                deviceListFactory.loadEchosounderConfiguration(function(success){
+                    if(success){
+                        configuration = deviceListFactory.getEchosounderConfiguration()[echosounderName][deviceName];
+                        $scope.selectedTransmitPower = configuration.transmitPower
+                        $scope.pingInterval.value = configuration.pingInterval
+                        $scope.pingModes.selectedMode=configuration.pingMode
+                    }
+                    else{
+                        //error handling
+                    }
+                });
+            }else{
+                
+                
+                configuration = deviceListFactory.getEchosounderConfiguration()
+            }
+        }
         $scope.titleTableDisplay = function () {
             var count = Math.round($('.status-content').outerHeight() / $('.echosounder-table').outerHeight() + 0.5)
             var tempArray = []
@@ -257,23 +276,21 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
 
         }
         $scope.addEchoSounder = function () {
-            console.log('add Echosounder')
+            console.log('add Echosounder');
+            var temp;
             //if not already retrived ;make call to factory to get list of echosouder
             //  once you have the list go to modal
-
             //real time code
+/*                $scope.showLoadError = false;
+                $scope.showLoading = true; 
 
-            if ($scope.echosounders.length == 0) {
-                $scope.showLoadError = false;
-                $scope.showLoading = true;  //shows loading symbol
                 deviceListFactory.loadData(function (success) {
 
                     if (success) {
-
+                        
                         $scope.showLoading = false;
-                        $scope.deviceList = deviceListFactory.getData();                        
-                        var deviceList = $scope.deviceList;
-                        $scope.createEchosoundersList(deviceList)
+                        temp=deviceListFactory.getData()
+                        $scope.echosoudersInfo=temp;
                     } else {
 
                         $scope.showLoading = false;
@@ -284,31 +301,25 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                     $scope.$apply();    //this should be here so, that even error cases get applied
 
                 });
-
-
-            }
+*/
             //end of real time code  
 
 
 
             ////hardcoding starts
-            //if ($scope.echosounders.length==0){
-            //    var deviceList ={"CageEye mk.III":["4C:00:00:01", "4C:00:00:02","4C:00:00:03","4C:00:00:04","4C:00:00:05","4C:00:00:06" ]};
-            //    $scope.createEchosoundersList(deviceList)
-            //    
-            //}
-            ////hardcoding ends
+            temp={"CageEye mk.III":["4C:00:00:01", "4C:00:00:02","4C:00:00:03","4C:00:00:04","4C:00:00:05","4C:00:00:06" ],"Merdøye mk.II": "RS232 prototype","EK15": "not available (contact us)"};
+            $scope.echosoudersInfo = temp;
+            //hardcoding ends
 
             var flag = false;
-            angular.forEach($scope.echosounders, function (value, key) {
+            angular.forEach(temp, function (value, key) {
                 console.log(value, key)
                 if (!flag) {
-                    if (value.selected == false) {
-                        $scope.selectedEchoSounder.detail = value;
-                        flag = true
-                    }
+                    $scope.selectedEchoSounder.detail = value;
+                    //$scope.type=value;
+                    
+                    flag = true
                 }
-
             });
             $('#selectEchoSounder').modal('show')
             // debugger;
@@ -424,23 +435,28 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
         $timeout(function () {
             console.log('timeout');
             //hardcode data starts
+            
             $scope.echosounders={"CageEye mk.III":{"4111-0004":{"deviceStatus":true,"transmitPower":50,"pingMode":"Auto","pingInterval":100,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false}]}},"Merdøye mk.II":{"deviceStatus":true,"transmitPower":20,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false}]}}
             //$scope.echosounders={"CageEye mk.III":{},"Merdøye mk.II": {}}
             angular.forEach($scope.echosounders,function(value,key){
-                console.log(value)
-              //  debugger;
                if( Object.keys(value).length != 0 ){
-                  // console.log('inside show')
                    $scope.showEchoSounderBox = false;
                }
             });
             
             //hardcoded data ends
+
 /*
             //code to be used in real time
             deviceListFactory.loadEchosounderConfiguration(function(success){
                 if(success){
                     $scope.echosounders=deviceListFactory.getEchosounderConfiguration()
+                    $scope.titleTableDisplay()
+                    angular.forEach($scope.echosounders,function(value,key){
+                       if( Object.keys(value).length != 0 ){
+                           $scope.showEchoSounderBox = false;
+                       }
+                    });
                 }
                 else{
                     $scope.echosounders = {};
@@ -448,7 +464,8 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                 }
             });
             //real time code end
-*/            
+*/  
+
         })
 
 
