@@ -51,8 +51,19 @@ ngDevices.factory('deviceListFactory', [ '$http',
                 
             };
 
-            console.log("websocket: send", jsonrpc_method);
-            ws.send(JSON.stringify(jsonrpc_method));
+            if (ws.readyState == 1) {
+                console.log("websocket: send", jsonrpc_method);
+                ws.send(JSON.stringify(jsonrpc_method));
+            } else {
+                ws.onopen = function () {
+
+                    setTimeout(function () {
+                        console.log("websocket: send", jsonrpc_method);
+                        ws.send(JSON.stringify(jsonrpc_method));
+                    }, 1000);
+
+                };
+            }
 
         };
          DeviceList.prototype.loadEchosounderConfiguration = function (callback_function) {
@@ -130,7 +141,7 @@ ngDevices.factory('deviceListFactory', [ '$http',
             jsonrpc_method.jsonrpc = "2.0";
             jsonrpc_method.method = "set_status";
             jsonrpc_method.params = params;            
-            jsonrpc_method.id = "2";//change it as required
+            jsonrpc_method.id = "9";
 
             ws.onerror = function (event) {
                 console.log("websocket: error");
@@ -160,8 +171,19 @@ ngDevices.factory('deviceListFactory', [ '$http',
                 
             };
 
-            console.log("websocket: send", jsonrpc_method);
-            ws.send(JSON.stringify(jsonrpc_method));            
+            if (ws.readyState == 1) {
+                console.log("websocket: send", jsonrpc_method);
+                ws.send(JSON.stringify(jsonrpc_method));
+            } else {
+                ws.onopen = function () {
+
+                    setTimeout(function () {
+                        console.log("websocket: send", jsonrpc_method);
+                        ws.send(JSON.stringify(jsonrpc_method));
+                    }, 1000);
+
+                };
+            }
            
         }
 

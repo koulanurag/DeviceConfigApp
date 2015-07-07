@@ -57,7 +57,7 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
             jsonrpc_method.method = "configure";
             jsonrpc_method.params = [];
             jsonrpc_method.params[0] = JSON.stringify(params);
-            jsonrpc_method.id = "10";
+            jsonrpc_method.id = "10";            
 
             ws.onerror = function (event) {
                 console.log("websocket: error");
@@ -68,7 +68,7 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
 
                 try {
 
-                    var response = JSON.parse(event.data);
+                    var response = JSON.parse(event.data);                    
                     console.log("websocket: onmessage", response);
 
                     if (response.id == jsonrpc_method.id) {
@@ -82,8 +82,20 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
 
             };            
 
-            console.log("websocket: send", jsonrpc_method);
-            ws.send(JSON.stringify(jsonrpc_method));            
+            console.log("device:", device);
+            if (ws.readyState == 1) {
+                console.log("websocket: send", jsonrpc_method);
+                ws.send(JSON.stringify(jsonrpc_method));
+            } else {
+                ws.onopen = function () {
+
+                    setTimeout(function () {
+                        console.log("websocket: send", jsonrpc_method);
+                        ws.send(JSON.stringify(jsonrpc_method));
+                    }, 1000);
+
+                };
+            }
 
         };
 
@@ -155,8 +167,19 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
 
             };            
 
-            console.log("websocket: send", jsonrpc_method);
-            ws.send(JSON.stringify(jsonrpc_method));            
+            if (ws.readyState == 1) {
+                console.log("websocket: send", jsonrpc_method);
+                ws.send(JSON.stringify(jsonrpc_method));
+            } else {
+                ws.onopen = function () {
+
+                    setTimeout(function () {
+                        console.log("websocket: send", jsonrpc_method);
+                        ws.send(JSON.stringify(jsonrpc_method));
+                    }, 1000);
+
+                };
+            }
 
         };
         DeviceConfig.prototype.getRecordingStatus = function () {
@@ -214,8 +237,19 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
 
             };            
 
-            console.log("websocket: send", jsonrpc_method);
-            ws.send(JSON.stringify(jsonrpc_method));            
+            if (ws.readyState == 1) {
+                console.log("websocket: send", jsonrpc_method);
+                ws.send(JSON.stringify(jsonrpc_method));
+            } else {
+                ws.onopen = function () {
+
+                    setTimeout(function () {
+                        console.log("websocket: send", jsonrpc_method);
+                        ws.send(JSON.stringify(jsonrpc_method));
+                    }, 1000);
+
+                };
+            }
 
         };
         DeviceConfig.prototype.getWindowStatus = function () {

@@ -19,7 +19,8 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
         $scope.showStatusArea = true;
         $scope.titleTableCountArray = [1];
         $scope.echosoudersInfo={}
-         
+
+        $scope.selectedDevice = "";
          
         $scope.changeView = function(hardwareChannel){
             angular.forEach($scope.selectedEchoSounder.transducers,function(value,key){
@@ -195,8 +196,9 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
         $scope.sendDeviceConfig = function () {
             //new code 
             $scope.showLoading = true;
+            console.log($scope.selectedDevice);
             var device;
-            if(isArray($scope.echosoudersInfo[$scope.selectedEchoSounder.detail])){
+            if ($scope.isArray($scope.echosoudersInfo[$scope.selectedEchoSounder.detail])) {
                 device=$scope.selectedDevice;
             }
             sendDeviceConfigFactory.sendData($scope.selectedEchoSounder.detail ,device,$scope.selectedTransmitPower, $scope.pingModes.selectedMode, $scope.pingInterval, $scope.selectedEchoSounder.transducers, function (success) {
