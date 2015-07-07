@@ -51,14 +51,8 @@ ngDevices.factory('deviceListFactory', [ '$http',
                 
             };
 
-            ws.onopen = function () {
-                
-                setTimeout(function () {                    
-                    console.log("websocket: send", jsonrpc_method);
-                    ws.send(JSON.stringify(jsonrpc_method));
-                }, 1000);
-
-            };
+            console.log("websocket: send", jsonrpc_method);
+            ws.send(JSON.stringify(jsonrpc_method));
 
         };
          DeviceList.prototype.loadEchosounderConfiguration = function (callback_function) {
@@ -96,15 +90,20 @@ ngDevices.factory('deviceListFactory', [ '$http',
                 }
                 
             };
+            
+            if (ws.readyState == 1) {
+                console.log("websocket: send", jsonrpc_method);
+                ws.send(JSON.stringify(jsonrpc_method));
+            } else {
+                ws.onopen = function () {
 
-            ws.onopen = function () {
-                
-                setTimeout(function () {                    
-                    console.log("websocket: send", jsonrpc_method);
-                    ws.send(JSON.stringify(jsonrpc_method));
-                }, 1000);
+                    setTimeout(function () {
+                        console.log("websocket: send", jsonrpc_method);
+                        ws.send(JSON.stringify(jsonrpc_method));
+                    }, 1000);
 
-            };
+                };
+            }
 
         };
         
@@ -161,14 +160,8 @@ ngDevices.factory('deviceListFactory', [ '$http',
                 
             };
 
-            ws.onopen = function () {
-                
-                setTimeout(function () {                    
-                    console.log("websocket: send", jsonrpc_method);
-                    ws.send(JSON.stringify(jsonrpc_method));
-                }, 1000);
-
-            };
+            console.log("websocket: send", jsonrpc_method);
+            ws.send(JSON.stringify(jsonrpc_method));            
            
         }
 
