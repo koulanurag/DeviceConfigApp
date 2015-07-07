@@ -116,6 +116,9 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                     $scope.showTransducerContentLoading = false;
                     $scope.showTransducerContentError = true;
                 }
+
+                $scope.$apply();
+
             });
 
 
@@ -201,16 +204,16 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                 if (success) {
                     
                     $scope.showLoading = false;
-                    if(device != undefined && Array.isArray($scope.echosoudersInfo[$scope.selectedEchoSounder.detail])){
-                        $scope.echosounders[$scope.selectedEchoSounder.detail] = sendDeviceConfigFactory.getStatus()[$scope.selectedEchoSounder.detail][device]
+                    if (device != undefined && Array.isArray($scope.echosoudersInfo[$scope.selectedEchoSounder.detail])) {
+                        $scope.echosounders[$scope.selectedEchoSounder.detail][device] = sendDeviceConfigFactory.getStatus()[$scope.selectedEchoSounder.detail][device]                        
                     }
                     if(!Array.isArray($scope.echosoudersInfo[$scope.selectedEchoSounder.detail])){
                         $scope.echosounders[$scope.selectedEchoSounder.detail] = sendDeviceConfigFactory.getStatus()[$scope.selectedEchoSounder.detail]
                     }
 
 
-                    var deviceConfigStatus = sendDeviceConfigFactory.getStatus();
-                    $scope.processStatus(deviceConfigStatus, selectedEchoSounderIndex)
+                    //var deviceConfigStatus = sendDeviceConfigFactory.getStatus();
+                    //$scope.processStatus(deviceConfigStatus, selectedEchoSounderIndex)
                     $scope.showStatusArea = true;
                     $('#selectEchoSounder').modal('hide');
                     $scope.selectedEchoSounderCount += 1
@@ -227,8 +230,7 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                 }
                 $scope.$apply();//this should be here so, that even error cases get applied
             });            
-            
-            
+                       
             //new code end
             
             
