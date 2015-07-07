@@ -13,7 +13,7 @@
             <tr ng-repeat="x in titleTableCountArray">
                 <td class="row-title-table">
                     <table class="table table-bordered ">
-                        <tr><td>Echo Sounder</td>
+                        <tr class="echoTitleHeight"><td>Echo Sounder</td>
                         <tr>
                             <td>
                                 <table class="table table-bordered inner-table">
@@ -38,9 +38,9 @@
                 <table class="table table-bordered echosounder-table" ng-repeat="(d,dDetail) in esDetail">
                     <tr>
     <!--                    <td colspan={{getEnabledTransducerCount(dDetail.transducers)}}>-->
-                        <td colspan={{dDetail.transducers.length}}>
+                        <td class="echoTitleHeight" colspan={{dDetail.transducers.length}}>
                             {{ es + ":" + d}}
-                            <i class="icon-button pull-right" data-ng-class="{'fa fa-play':dDetail.deviceStatus==false,'fa fa-stop':dDetail.deviceStatus==true,'fa fa-refresh faa-spin animated': dDetail.deviceStatus=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger': dDetail.deviceStatus=='error'}" data-ng-click="changeEchoSounderStatus(es,d)"></i>
+                            <i class=" cell-icon pull-right" data-ng-class="{'icon-button fa fa-play':dDetail.deviceStatus==false,'icon-button fa fa-stop':dDetail.deviceStatus==true,'icon-button-refresh fa fa-refresh faa-spin animated': dDetail.deviceStatus=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger': dDetail.deviceStatus=='error'}" data-ng-click="changeEchoSounderStatus(es,d)"></i>
                         </td>
                     </tr>
                     <tr ng-class="{'transparent':dDetail.deviceStatus!=true}">
@@ -49,8 +49,8 @@
                                 <tr><td>{{t.name}}</td></tr>
                                 <tr><td>{{t.hardware_channel}}</td></tr>
                                 <tr><td>{{t.software_channel}}</td></tr>
-                                <tr><td><i class="custom-line-height" data-ng-class="{'fa fa-microphone':t.recording==true,'fa fa-microphone-slash':t.recording==false,'fa fa-refresh faa-spin animated':t.recording=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.recording=='error'}" data-ng-click="changeRecordingStatus(es,t.hardware_channel,d)"></i></td></tr>
-                                <tr><td><i class="custom-line-height" data-ng-class="{'fa fa-square-o':t.window==true,'fa fa-square':t.window==false,'fa fa-refresh faa-spin animated':t.window=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.window=='error'}" data-ng-click="changeWindowStatus(es,t.hardware_channel,d)"></i></td></tr>
+                                <tr><td><i class="custom-line-height cell-icon" data-ng-class="{'fa fa-microphone':t.recording==true,'fa fa-microphone-slash':t.recording==false,'fa fa-refresh faa-spin animated':t.recording=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.recording=='error'}" data-ng-click="changeRecordingStatus(es,t.hardware_channel,d)"></i></td></tr>
+                                <tr><td><i class="custom-line-height cell-icon" data-ng-class="{'fa fa-square-o':t.window==true,'fa fa-square':t.window==false,'fa fa-refresh faa-spin animated':t.window=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.window=='error'}" data-ng-click="changeWindowStatus(es,t.hardware_channel,d)"></i></td></tr>
                             </table>
                         </td>
                     </tr>
@@ -60,9 +60,9 @@
                 <table class="table table-bordered echosounder-table">
                     <tr>
     <!--                    <td colspan={{getEnabledTransducerCount(dDetail.transducers)}}>-->
-                        <td colspan={{esDetail.transducers.length}}>
+                        <td class="echoTitleHeight" colspan={{esDetail.transducers.length}}>
                             {{ es}}
-                            <i class="icon-button pull-right" data-ng-class="{'fa fa-play':dDetail.deviceStatus==false,'fa fa-stop':esDetail.deviceStatus==true,'fa fa-refresh faa-spin animated' : esDetail.deviceStatus=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger' : esDetail.deviceStatus=='error'}" data-ng-click="changeEchoSounderStatus(es)"></i>
+                            <i class=" cell-icon pull-right" data-ng-class="{'icon-button fa fa-play':dDetail.deviceStatus==false,'icon-button fa fa-stop':esDetail.deviceStatus==true,'fa fa-refresh faa-spin animated' : esDetail.deviceStatus=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger' : esDetail.deviceStatus=='error'}" data-ng-click="changeEchoSounderStatus(es)"></i>
                         </td>
                     </tr>
                     <tr ng-class="{'transparent':esDetail.deviceStatus!=true}">
@@ -71,8 +71,8 @@
                                 <tr><td>{{t.name}}</td></tr>
                                 <tr><td>{{t.hardware_channel}}</td></tr>
                                 <tr><td>{{t.software_channel}}</td></tr>
-                                <tr><td><i class="custom-line-height" data-ng-class="{'fa fa-microphone':t.recording==true,'fa fa-microphone-slash':t.recording==false,'fa fa-refresh faa-spin animated':t.recording=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.recording=='error'}" data-ng-click="changeRecordingStatus(es,t.hardware_channel)"></i></td></tr>
-                                <tr><td><i class="custom-line-height" data-ng-class="{'fa fa-square-o':t.window==true,'fa fa-square':t.window==false,'fa fa-refresh faa-spin animated':t.window=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.window=='error'}" data-ng-click="changeWindowStatus(es,t.hardware_channel)"></i></td></tr>                            </table>
+                                <tr><td><i class="custom-line-height cell-icon" data-ng-class="{'fa fa-microphone':t.recording==true,'fa fa-microphone-slash':t.recording==false,'fa fa-refresh faa-spin animated':t.recording=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.recording=='error'}" data-ng-click="changeRecordingStatus(es,t.hardware_channel)"></i></td></tr>
+                                <tr><td><i class="custom-line-height cell-icon" data-ng-class="{'fa fa-square-o':t.window==true,'fa fa-square':t.window==false,'fa fa-refresh faa-spin animated':t.window=='refreshing','fa fa-exclamation-triangle faa-flash animated text-danger':t.window=='error'}" data-ng-click="changeWindowStatus(es,t.hardware_channel)"></i></td></tr>                            </table>
                         </td>
                     </tr>
                 </table>
@@ -93,7 +93,7 @@
                 <i class="fa fa-2x fa-cog add-button"></i>
             </div>
         </div>
-        <div class="dropdown device-dropdown-fixed">
+<!--        <div class="dropdown device-dropdown-fixed">
             <div class="list" ng-show="showDeviceListDropUp">
                 <ul>
                     <li data-ng-click="deviceListDropUp('EchoSounder1')">EchoSounder1</li>
@@ -108,7 +108,7 @@
                     <span class="caret"></span>
                 </span>
             </button>
-        </div>
+        </div>-->
     </div>
 </footer>
 
@@ -123,20 +123,51 @@
                     <i class="fa fa-warning fa" data-ng-if="showLoadError">Sorry, Something went Wrong</i>
                 </div>
                 <div class="content" ng-if="!showLoadError && !showLoading">
-                    <div id="echosounderTypes">
-                        <h2 class="fs-title">Type :</h2>
-                        <span class="custom-dropdown big">
-                            <select data-ng-options="k for (k,v) in echosoudersInfo" data-ng-model="selectedEchoSounder.detail" data-ng-change="getConfiguration(selectedEchoSounder.detail)"></select><!--selectedEchoSounder.detail-->
-                        </span>
-                    </div>
-                    <div id="DeviceList" ng-if="selectedEchoSounder.detail == echosoudersInfo['CageEye mk.III']">
-                        <h2 class="fs-title">Device :</h2>
-                        <span class="custom-dropdown big">
-                            <select data-ng-options="v for (k,v) in selectedEchoSounder.detail" data-ng-model="selectedDevice" data-ng-change="getConfiguration(selectedEchoSounder.detail,selectedDevice)"></select><!--selectedEchoSounder.detail-->
-    <!--                        <select data-ng-options="e in selectedEchoSounder.detail" data-ng-model="abc" ></select>-->
-                        </span>
-                    </div>
-                    <table class="table">
+                <form name="configureEchosounderForm" data-ng-submit="sendDeviceConfig()">
+                    <table class="configureEcosounderForm">
+                        <tr>
+                            <td>
+                                <span class="fs-title">Type</span>
+                            </td>
+                            <td>
+                                :
+                            </td>
+                            <td>
+                                <span class="custom-dropdown">
+                                    <select data-ng-options="k as k for (k,v) in echosoudersInfo" data-ng-model="selectedEchoSounder.detail" data-ng-change="getConfiguration(selectedEchoSounder.detail)"></select><!--selectedEchoSounder.detail-->
+                                </span>
+                            </td>
+                        </tr>
+                        <tr ng-if="isArray(echosoudersInfo[selectedEchoSounder.detail])">
+                            <td>
+                                <span class="fs-title">Device</span>
+                            </td>
+                            <td>
+                                :
+                            </td>
+                            <td>
+                                <span class="custom-dropdown">
+                                    <select data-ng-options="v for (k,v) in echosoudersInfo[selectedEchoSounder.detail]" data-ng-model="selectedDevice" data-ng-change="getConfiguration(selectedEchoSounder.detail,selectedDevice)"></select>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr  ng-if="!isArray(echosoudersInfo[selectedEchoSounder.detail]) ">
+                            <td>
+                                <span class="fs-title">Transmit Power</span>
+                            </td>
+                            <td>
+                                :
+                            </td>
+                            <td>
+                                    <span class="custom-dropdown medium">
+                                        <select data-ng-options="power for power in transmitPowers" data-ng-model="selectedTransmitPower"></select>
+                                    </span>
+                                    <span class="units">W</span>
+                                    
+                            </td>
+                        </tr>                        
+                    </table>
+                    <table class="table" ng-if="isArray(echosoudersInfo[selectedEchoSounder.detail]) ">
                         <thead>
                             <tr>
                                 <td>Transmit Power</td>
@@ -153,7 +184,7 @@
                                     <span class="units">W</span>
                                 </td>
                                 <td>
-                                    <input type="number" class="ping-interval-input" data-ng-model="pingInterval.value" placeholder="" min="{{pingInterval.min}}" max="{{pingInterval.max}}" step="{{pingInterval.step}}" />
+                                    <input type="number" class="ping-interval-input" data-ng-model="pingInterval.value" placeholder="" min="{{pingInterval.min}}" max="{{pingInterval.max}}" step="{{pingInterval.step}}" required/>
                                     <span class="units">ms</span>
                                 </td>
                                 <td>
@@ -164,35 +195,60 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div class="transducer-form">
+                        <div class="error">
+                            <i class="fa fa-spinner fa-3x faa-spin animated" data-ng-if="showTransducerContentLoading"></i>
+                            <i class="fa fa-warning fa" data-ng-if="showTransducerContentError">Sorry, Something went Wrong</i>
+                        </div>
 
-                    <form data-ng-submit="sendDeviceConfig()">
-                        <h2 class="fs-title">Add Transducers</h2>
-                        <h3 class="fs-subtitle">Details of Transducers you wish to enable</h3>
-                        <div class="transducer-form-content">
-                            <div class="tooltip top form-title-tooltip" role="tooltip">
+                        <div class="transducer-form-content" ng-if="showTransducerContent">
+                            <h2 class="fs-title">Transducers :</h2>
+<!--                            <div class="tooltip top form-title-tooltip" role="tooltip">
                                 <div class="tooltip-arrow"></div>
                                 <div class="tooltip-inner">
                                     Hardware Channel
                                 </div>
-                            </div>
-                            <div ng-repeat="e in echosounders | filter:getSelectedEchoSounder">
-                                <div class="transducer-detail" data-ng-repeat="t in e.transducers">
-                                    <div class="tooltip left form-error-tooltip" role="tooltip" ng-if="t.error">
-                                        <div class="tooltip-arrow"></div>
-                                        <div class="tooltip-inner">
-                                            Enter Details
-                                        </div>
+                            </div>-->
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <td>Status</td>
+                                        <td>H_Channel</td>
+                                        <td>Name</td>
+                                        <td>View</td>
+                                    </tr>
+                                </thead>
+                                <tr data-ng-repeat="t in selectedEchoSounder.transducers">
+                                    <td>
+                                        <i class="fa-2x" data-ng-class="{'fa fa-check-square-o':t.enable==true,'fa fa-square-o':t.enable==false}" data-ng-click="changeStatus(t.hardware_channel)"></i>
+                                    </td>                                        
+                                    <td><input class="hardware-channel-input" type="text" data-ng-model="t.hardware_channel" placeholder="H Channel" /></td>
+                                    <td><input type="text" data-ng-model="t.name" placeholder="Name" data-ng-required="t.enable"/></td>
+                                    <td>
+                                        <i class="fa-2x" data-ng-class="{'fa fa-arrow-circle-up':t.view==true,'fa fa-arrow-circle-down':t.view==false}" data-ng-click="changeView(t.hardware_channel)"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4"><input type="button" name="addTransducer" id="addTransducer" value="Add Transducer" data-ng-click="addTransducer(t.hardware_channel)"/></td>
+                                </tr>
+                            </table>
+<!--                            <div class="transducer-detail" data-ng-repeat="t in selectedEchoSounder.transducers">
+                                <div class="tooltip left form-error-tooltip" role="tooltip" ng-if="t.error">
+                                    <div class="tooltip-arrow"></div>
+                                    <div class="tooltip-inner">
+                                        Enter Details
                                     </div>
-                                    <input type="checkbox" data-ng-model="t.enable" data-ng-change="validateTransducerDetail(t.id)" />
-                                    <input class="hardware-channel-input" type="text" data-ng-model="t.hardware_channel" placeholder="H Channel" readonly />
-                                    <input type="text" data-ng-model="t.name" placeholder="Name" />
-                                    <input type="number" data-ng-model="t.depth" placeholder="Depth" />
-                                    <i data-ng-class="{'fa fa-arrow-circle-up':t.view==true,'fa fa-arrow-circle-down':t.view==false}">
-                                        <input type="checkbox" data-ng-model="t.view" />
-                                    </i>
                                 </div>
+                                <input type="checkbox" data-ng-model="t.enable"/>--> <!--data-ng-change="validateTransducerDetail(t.id)"-->
+<!--                                <input class="hardware-channel-input" type="text" data-ng-model="t.hardware_channel" placeholder="H Channel" readonly />
+                                <input type="text" data-ng-model="t.name" placeholder="Name" data-ng-required="t.enable"/>
+                                <i data-ng-class="{'fa fa-arrow-circle-up':t.view==true,'fa fa-arrow-circle-down':t.view==false}">
+                                    <input type="checkbox" data-ng-model="t.view" />
+                                </i>
                             </div>
-                        </div>                        
+
+                        </div>-->
+                    </div>
                         <input type="submit" name="submit" class="action-button" value="Submit" />
                     </form>
 
