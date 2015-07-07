@@ -195,7 +195,11 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
         $scope.sendDeviceConfig = function () {
             //new code 
             $scope.showLoading = true;
-            sendDeviceConfigFactory.sendData($scope.selectedEchoSounder.detail ,$scope.selectedTransmitPower, $scope.pingModes.selectedMode, $scope.pingInterval, $scope.selectedEchoSounder.transducers, function (success) {
+            var device;
+            if(isArray($scope.echosoudersInfo[$scope.selectedEchoSounder.detail])){
+                device=$scope.selectedDevice;
+            }
+            sendDeviceConfigFactory.sendData($scope.selectedEchoSounder.detail ,device,$scope.selectedTransmitPower, $scope.pingModes.selectedMode, $scope.pingInterval, $scope.selectedEchoSounder.transducers, function (success) {
                 if (success) {
                     
                     $scope.showLoading = false;

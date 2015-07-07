@@ -4,7 +4,7 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
         function DeviceConfig() {
 
             this.defaults = {
-
+                type:   'type',
                 device: 'device',
                 deviceStatus:'deviceStatus',
                 transducers: 'transducers',
@@ -21,10 +21,12 @@ ngDevices.factory('sendDeviceConfigFactory', [ '$http',
 
         }        
 
-        DeviceConfig.prototype.sendData = function (device,transmitPower,pingMode,pingInterval,transducers,callback_function) {
+        DeviceConfig.prototype.sendData = function (type,device,transmitPower,pingMode,pingInterval,transducers,callback_function) {
             
             var params = {};
-
+            if(type !== undefined){
+                params[this.defaults.type] = type;
+            }
             if (device !== '') {
                 params[this.defaults.device] = device;
             }
