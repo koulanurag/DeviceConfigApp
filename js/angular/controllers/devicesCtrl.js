@@ -19,9 +19,6 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
         $scope.showStatusArea = true;
         $scope.titleTableCountArray = [1];
         $scope.echosoudersInfo={}
-
-        $scope.selectedDevice = "";
-         
         $scope.changeView = function(hardwareChannel){
             angular.forEach($scope.selectedEchoSounder.transducers,function(value,key){
                 if(value.hardware_channel == hardwareChannel){
@@ -54,8 +51,8 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
         $scope.getConfiguration = function(echosounderName,deviceName){
             $scope.showTransducerContent = false;
             //hardcoding starts
-            
-/*            var configuration = {"CageEye mk.III":{"4111-0004":{"deviceStatus":true,"transmitPower":40,"pingMode":"Auto","pingInterval":100,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false,"view":false,"enable":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false,"view":false,"enable":false}]}},"Merdøye mk.II":{"deviceStatus":true,"transmitPower":20,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false,"view":false,"enable":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false,"view":false,"enable":false}]}};
+/*            
+            var configuration = {"CageEye mk.III":{"4111-0004":{"deviceStatus":true,"transmitPower":40,"pingMode":"Auto","pingInterval":100,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false,"view":false,"enable":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false,"view":false,"enable":false}]}},"Merdøye mk.II":{"deviceStatus":true,"transmitPower":20,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false,"view":false,"enable":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false,"view":false,"enable":false}]}};
             if(deviceName != undefined && Array.isArray($scope.echosoudersInfo[$scope.selectedEchoSounder.detail])){
                 configuration = configuration[echosounderName][deviceName];
                 $scope.showTransducerContent = true;
@@ -79,13 +76,12 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                 $scope.selectedEchoSounder['transducers'] = configuration.transducers
                 $scope.showTransducerContentLoading = false;
             }
-            */
-            //hardcoding ends
+            
+*/            //hardcoding ends
             
             
             //real time code starts
             
- 
             var configuration;
             $scope.showTransducerContentLoading = true;
             deviceListFactory.loadEchosounderConfiguration(function(success){
@@ -121,7 +117,7 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                     $scope.showTransducerContentError = true;
                 }
             });
-            
+
 
             //real time code ends
         
@@ -195,11 +191,11 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
         
         $scope.sendDeviceConfig = function () {
             //new code 
+            debugger;
             $scope.showLoading = true;
-            console.log($scope.selectedDevice);
             var device;
             if ($scope.isArray($scope.echosoudersInfo[$scope.selectedEchoSounder.detail])) {
-                device=$scope.selectedDevice;
+                device=$scope.selectedEchoSounder.device;
             }
             sendDeviceConfigFactory.sendData($scope.selectedEchoSounder.detail ,device,$scope.selectedTransmitPower, $scope.pingModes.selectedMode, $scope.pingInterval, $scope.selectedEchoSounder.transducers, function (success) {
                 if (success) {

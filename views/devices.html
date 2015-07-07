@@ -147,7 +147,7 @@
                             </td>
                             <td>
                                 <span class="custom-dropdown">
-                                    <select data-ng-options="v for (k,v) in echosoudersInfo[selectedEchoSounder.detail]" data-ng-model="selectedDevice" data-ng-change="getConfiguration(selectedEchoSounder.detail,selectedDevice)"></select>
+                                    <select data-ng-options="v for (k,v) in echosoudersInfo[selectedEchoSounder.detail]" data-ng-model="selectedEchoSounder.device" data-ng-change="getConfiguration(selectedEchoSounder.detail,selectedEchoSounder.device)"></select>
                                 </span>
                             </td>
                         </tr>
