@@ -54,7 +54,7 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
             $scope.showTransducerContent = false;
             //hardcoding starts
             
-            var configuration = {"CageEye mk.III":{"4111-0004":{"deviceStatus":true,"transmitPower":40,"pingMode":"Auto","pingInterval":100,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false,"view":false,"enable":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false,"view":false,"enable":false}]}},"Merdøye mk.II":{"deviceStatus":true,"transmitPower":20,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false,"view":false,"enable":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false,"view":false,"enable":false}]}};
+/*            var configuration = {"CageEye mk.III":{"4111-0004":{"deviceStatus":true,"transmitPower":40,"pingMode":"Auto","pingInterval":100,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false,"view":false,"enable":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false,"view":false,"enable":false}]}},"Merdøye mk.II":{"deviceStatus":true,"transmitPower":20,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false,"view":false,"enable":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false,"view":false,"enable":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false,"view":false,"enable":false}]}};
             if(deviceName != undefined && Array.isArray($scope.echosoudersInfo[$scope.selectedEchoSounder.detail])){
                 configuration = configuration[echosounderName][deviceName];
                 $scope.showTransducerContent = true;
@@ -78,13 +78,13 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                 $scope.selectedEchoSounder['transducers'] = configuration.transducers
                 $scope.showTransducerContentLoading = false;
             }
-            
+            */
             //hardcoding ends
             
             
             //real time code starts
             
-/* 
+ 
             var configuration;
             $scope.showTransducerContentLoading = true;
             deviceListFactory.loadEchosounderConfiguration(function(success){
@@ -121,7 +121,7 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                 }
             });
             
-*/
+
             //real time code ends
         
         }
@@ -408,37 +408,48 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
             //if not already retrived ;make call to factory to get list of echosouder
             //  once you have the list go to modal
             //real time code
-/*                $scope.showLoadError = false;
-                $scope.showLoading = true; 
+            $scope.showLoadError = false;
+            $scope.showLoading = true; 
 
-                deviceListFactory.loadData(function (success) {
+            deviceListFactory.loadData(function (success) {
 
-                    if (success) {
-                        
-                        $scope.showLoading = false;
-                        temp=deviceListFactory.getData()
-                        $scope.echosoudersInfo=temp;
-                    } else {
+                if (success) {
+                    
+                    $scope.showLoading = false;
+                    temp=deviceListFactory.getData()
+                    $scope.echosoudersInfo=temp;
+                    var flag = false;
+                    angular.forEach(temp, function (value, key) {
+                        console.log(value, key)
+                        if (!flag) {
+                            $scope.selectedEchoSounder.detail = key;
+                            //$scope.type=value;
+                            
+                            flag = true
+                        }
+                    });
+                    
+                } else {
 
-                        $scope.showLoading = false;
-                        $scope.showLoadError = true;
-                        console.log("There was an error while retrieving device list");
+                    $scope.showLoading = false;
+                    $scope.showLoadError = true;
+                    console.log("There was an error while retrieving device list");
 
-                    }
-                    $scope.$apply();    //this should be here so, that even error cases get applied
+                }
+                $scope.$apply();    //this should be here so, that even error cases get applied
 
-                });
-*/
+            });
+
             //end of real time code  
 
 
 
             ////hardcoding starts
-            temp={"CageEye mk.III":["4111-0004", "4111-0005","4C:00:00:03","4C:00:00:04","4C:00:00:05","4C:00:00:06" ],"Merdøye mk.II": "RS232 prototype","EK15": "not available (contact us)"};
-            $scope.echosoudersInfo = temp;
+/*            temp={"CageEye mk.III":["4111-0004", "4111-0005","4C:00:00:03","4C:00:00:04","4C:00:00:05","4C:00:00:06" ],"Merdøye mk.II": "RS232 prototype","EK15": "not available (contact us)"};
+            $scope.echosoudersInfo = temp;*/
             //hardcoding ends
 
-            var flag = false;
+/*            var flag = false;
             angular.forEach(temp, function (value, key) {
                 console.log(value, key)
                 if (!flag) {
@@ -447,7 +458,7 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                     
                     flag = true
                 }
-            });
+            });*/
             $('#selectEchoSounder').modal('show')
 
             // debugger;
@@ -569,18 +580,18 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                 show : false
             })
             //hardcode data starts
-            
+/*            
             $scope.echosounders={"CageEye mk.III":{"4111-0004":{"deviceStatus":true,"transmitPower":50,"pingMode":"Auto","pingInterval":100,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false}]}},"Merdøye mk.II":{"deviceStatus":true,"transmitPower":20,"transducers":[{"name":"tet","hardware_channel":1,"software_channel":1,"recording":false,"window":false},{"name":"tete","hardware_channel":2,"software_channel":2,"recording":false,"window":false},{"name":"tet","hardware_channel":3,"software_channel":3,"recording":false,"window":false},{"name":"tete","hardware_channel":4,"software_channel":4,"recording":false,"window":false},{"name":"tete","hardware_channel":5,"software_channel":5,"recording":false,"window":false},{"name":"tete","hardware_channel":6,"software_channel":6,"recording":false,"window":false}]}}
             //$scope.echosounders={"CageEye mk.III":{},"Merdøye mk.II": {}}
             angular.forEach($scope.echosounders,function(value,key){
                if( Object.keys(value).length != 0 ){
                    $scope.showEchoSounderBox = false;
                }
-            });
+            });*/
             
             //hardcoded data ends
 
-/*
+
             //code to be used in real time
             deviceListFactory.loadEchosounderConfiguration(function(success){
                 if(success){
@@ -598,7 +609,7 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                 }
             });
             //real time code end
-*/  
+  
 
         })
 
