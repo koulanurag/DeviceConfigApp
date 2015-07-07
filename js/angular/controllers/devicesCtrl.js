@@ -201,8 +201,8 @@ ngDevices.controller('devicesCtrl', ['$scope', '$timeout', 'deviceListFactory', 
                 if (success) {
                     
                     $scope.showLoading = false;
-                    if(deviceName != undefined && Array.isArray($scope.echosoudersInfo[$scope.selectedEchoSounder.detail])){
-                        $scope.echosounders[$scope.selectedEchoSounder.detail] = sendDeviceConfigFactory.getStatus()[$scope.selectedEchoSounder.detail]
+                    if(device != undefined && Array.isArray($scope.echosoudersInfo[$scope.selectedEchoSounder.detail])){
+                        $scope.echosounders[$scope.selectedEchoSounder.detail] = sendDeviceConfigFactory.getStatus()[$scope.selectedEchoSounder.detail][device]
                     }
                     if(!Array.isArray($scope.echosoudersInfo[$scope.selectedEchoSounder.detail])){
                         $scope.echosounders[$scope.selectedEchoSounder.detail] = sendDeviceConfigFactory.getStatus()[$scope.selectedEchoSounder.detail]
